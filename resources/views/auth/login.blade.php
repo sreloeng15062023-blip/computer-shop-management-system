@@ -1,88 +1,130 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 text-white font-bold text-2xl shadow-lg mb-2">
-                    💻
-                </div>
-                <h1 class="text-2xl font-bold text-gray-900">Computer Shop System</h1>
-                <p class="text-sm text-gray-500 mt-1">Management Portal (Topic 22)</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Computer Shop Management System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="h-screen w-full bg-cover bg-center flex items-center justify-end pr-8 sm:pr-14 lg:pr-24"
+    style="background-image: url('{{ asset('images/pc.png') }}');">
+
+    <!-- LOGIN CARD -->
+    <div class="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center border border-white/60">
+
+        <!-- Logo Icon & Title -->
+        <div class="mb-4">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 text-white text-xl shadow-md mb-2">
+                <i class="fa-solid fa-desktop"></i>
             </div>
-        </x-slot>
+            <h2 class="text-2xl font-bold text-gray-800">Sign in</h2>
+            <p class="text-xs text-gray-500 mt-1">Computer Shop Management System</p>
+        </div>
 
         <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+        @if (session('status'))
+        <div class="mb-4 p-2.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded-xl text-left">
+            {{ session('status') }}
+        </div>
+        @endif
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <!-- Validation Errors Display -->
+        @if ($errors->any())
+        <div class="mb-4 p-2.5 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl text-left">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ $errors->first() }}
+        </div>
+        @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <!-- Login Form -->
+        <form action="{{ route('login') }}" method="POST" class="space-y-3.5" autocomplete="off">
             @csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email Address')" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <!-- Email Address Input -->
+            <div class="relative text-left">
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="off" placeholder="Email Address"
+                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs text-gray-700 bg-gray-50/50">
+                <i class="fa-regular fa-envelope absolute right-3.5 top-3.5 text-gray-400 text-xs"></i>
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+            <!-- Password Input -->
+            <div class="relative text-left">
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Password"
+                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs text-gray-700 bg-gray-50/50">
+                <i class="fa-solid fa-lock absolute right-3.5 top-3.5 text-gray-400 text-xs"></i>
             </div>
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 text-xs">
+                    <span class="ml-1.5">Remember me</span>
                 </label>
-            </div>
-
-            <div class="flex items-center justify-between mt-6">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot password?') }}
-                    </a>
-                @else
-                    <span></span>
+                <a href="{{ route('password.request') }}" class="hover:text-blue-600 hover:underline">Forgot password?</a>
                 @endif
-
-                <x-button class="ml-3 bg-indigo-600 hover:bg-indigo-700">
-                    {{ __('Sign In') }}
-                </x-button>
             </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-xl transition shadow-md hover:shadow-lg">
+                Sign In
+            </button>
         </form>
 
-        <!-- Quick-Fill Demo Buttons for Teacher & Testing -->
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 text-center">
-                Demo Accounts (Password: <span class="font-mono text-gray-600">password123</span>):
+        <!-- Quick-Fill Demo Buttons for Easy Testing -->
+        <div class="mt-6 pt-4 border-t border-gray-200">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                Demo Accounts (<span class="font-mono text-gray-600">password123</span>):
             </p>
-            <div class="grid grid-cols-3 gap-2">
-                <button type="button" onclick="fillCredentials('admin@shop.com', 'password123')"
-                    class="py-2 px-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600 transition">
+            <div class="grid grid-cols-3 gap-1.5">
+                <button type="button" onclick="fillForm('admin@shop.com', 'password123')"
+                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition">
                     👑 Admin
                 </button>
-                <button type="button" onclick="fillCredentials('cashier@shop.com', 'password123')"
-                    class="py-2 px-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600 transition">
+                <button type="button" onclick="fillForm('cashier@shop.com', 'password123')"
+                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition">
                     💳 Cashier
                 </button>
-                <button type="button" onclick="fillCredentials('tech@shop.com', 'password123')"
-                    class="py-2 px-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-600 transition">
+                <button type="button" onclick="fillForm('tech@shop.com', 'password123')"
+                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition">
                     🔧 Tech
                 </button>
             </div>
         </div>
 
-        <script>
-            function fillCredentials(email, password) {
-                document.getElementById('email').value = email;
-                document.getElementById('password').value = password;
-            }
-        </script>
-    </x-auth-card>
-</x-guest-layout>
+        <!-- Social Platform Buttons -->
+        <div class="mt-5">
+            <p class="text-[11px] text-gray-400 mb-2">or login with social platform</p>
+            <div class="flex justify-center items-center gap-3">
+                <a href="{{ route('social.login', 'google') }}" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-red-50 hover:border-red-500 transition">
+                    <i class="fa-brands fa-google text-xs text-red-500"></i>
+                </a>
+                <a href="{{ route('social.login', 'facebook') }}" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-blue-50 hover:border-blue-500 transition">
+                    <i class="fa-brands fa-facebook-f text-xs text-blue-600"></i>
+                </a>
+                <a href="{{ route('social.login', 'telegram') }}" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-sky-50 hover:border-sky-500 transition">
+                    <i class="fa-brands fa-telegram text-xs text-sky-500"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-4 text-xs text-gray-600">
+            Don't have an account? <a href="{{ route('register') }}" class="text-blue-600 font-semibold hover:underline">Register</a>
+        </div>
+
+    </div>
+
+    <!-- Quick-Fill Script -->
+    <script>
+        function fillForm(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+    </script>
+</body>
+
+</html>
