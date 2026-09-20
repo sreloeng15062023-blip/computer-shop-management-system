@@ -1,89 +1,71 @@
-# Computer Shop Management System
+# Computer Shop Management System (Topic 22)
 
-A comprehensive management system for a computer retail and repair shop, built with a decoupled architecture featuring a Laravel REST API backend and a modern frontend client.
+A comprehensive Web-Based Management System for a computer retail and repair shop, built with **Laravel (PHP)**, **MySQL**, **Blade Templates**, and **Tailwind CSS**.
 
----
-
-## Repository Structure
-
-```text
-computer-shop-management-system/
-├── backend/                      # Laravel 8 REST API
-│   ├── app/
-│   │   ├── Http/
-│   │   │   ├── Controllers/Api/  # Dedicated API Controllers
-│   │   │   ├── Requests/         # Form Request Validations
-│   │   │   └── Resources/        # API Resources / JSON Transformers
-│   │   └── Models/               # Eloquent Models (28 Tables)
-│   ├── config/
-│   │   └── cors.php              # CORS configuration for Frontend requests
-│   ├── database/
-│   │   ├── migrations/           # Database schema migrations
-│   │   └── seeders/              # Database seeders with test data
-│   ├── routes/
-│   │   └── api.php               # REST API endpoints
-│   ├── .env.example              # Backend environment template
-│   ├── composer.json
-│   └── artisan
-│
-├── frontend/                     # Frontend Application (React / Vite)
-│   ├── public/                   # Static assets & favicons
-│   ├── src/
-│   │   ├── api/                  # Centralized Axios client & API services
-│   │   │   ├── axios.js          # Base URL & Auth interceptors
-│   │   │   ├── auth.api.js       # Auth endpoints
-│   │   │   ├── product.api.js    # Product catalog endpoints
-│   │   │   ├── pos.api.js        # POS checkout & receipt endpoints
-│   │   │   └── repair.api.js     # Repair service endpoints
-│   │   ├── assets/               # CSS styles & images
-│   │   ├── components/           # Reusable UI components
-│   │   ├── context/              # Global state (Auth, POS Cart)
-│   │   ├── layouts/              # App & Dashboard layouts
-│   │   ├── routes/               # Route definitions & guards
-│   │   └── views/                # Views for the 16 Functional Modules
-│   │       ├── auth/             # Login, Profile, Password
-│   │       ├── dashboard/        # Metrics & Charts
-│   │       ├── products/         # Catalog & Barcodes
-│   │       ├── pos/              # POS Terminal & Billing
-│   │       ├── repairs/          # Repair lifecycle tracking
-│   │       ├── inventory/        # Stock management
-│   │       ├── warranties/       # Warranty claims
-│   │       ├── reports/          # Report exports
-│   │       └── settings/         # System settings
-│   ├── .env.example              # Frontend environment template
-│   └── package.json
-│
-├── docs/                         # Shared project specifications & assets
-│   ├── database/                 # Database ERD diagram & schema
-│   ├── postman/                  # Postman API Collection
-│   └── requirements/             # Functional specifications (Topic 22)
-│
-├── .gitignore                    # Root ignore file (protects backend & frontend)
-└── README.md                     # Project documentation & setup guide
-```
+Assignment for **Web App Framework (Year 2, Semester 2)**.
 
 ---
 
-## 🚀 Getting Started
+## 💻 Tech Stack
+- **Framework**: Laravel 8 (PHP)
+- **Database**: MySQL (28 Database Tables)
+- **Frontend / Templating**: Laravel Blade + Tailwind CSS
+- **Authentication**: Role-Based Access Control (RBAC) with 5 roles:
+  - `Admin`
+  - `Manager`
+  - `Sale Staff`
+  - `Cashier`
+  - `Technician`
 
-### 1. Backend Setup (Laravel API)
+---
 
-1. Open your terminal and navigate to `backend/`:
+## 📋 16 Main Functional Modules
+1. **User Authentication & RBAC**: Multi-role login, profile, password reset
+2. **Dashboard**: Metrics for products, available stock, low stock alerts, repairs, and charts
+3. **Product Management**: SKU, barcodes, serial numbers, categories, pricing
+4. **Brand Management**: Dell, HP, Lenovo, ASUS, Acer, Apple, MSI, etc.
+5. **Supplier Management**: Suppliers, purchase history, order tracking
+6. **Customer Management**: Customer profiles, warranty history, loyalty points
+7. **Purchase Management**: Purchase orders, receiving, status tracking
+8. **Inventory Management**: Stock in, stock out, adjustments, serial tracking
+9. **Sales Management (POS)**: POS terminal, discounts, coupons, receipts
+10. **Repair Service Management**: Device intake, technician assign, repair status pipeline
+11. **Warranty Management**: Registration, warranty verification, claim processing
+12. **Payment & Invoice Management**: Invoicing, payment records, refunds
+13. **Employee Management**: Attendance, schedules, salary, staff roles
+14. **Report Management**: Daily/monthly sales, inventory, repairs, PDF/Excel export
+15. **Notification System**: Low stock alerts, warranty reminders, repair completion
+16. **Settings**: Shop details, tax configuration, currency, backup/restore database
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Prerequisites
+- PHP >= 7.3 (PHP 8.0+ recommended)
+- Composer
+- MySQL (WampServer / XAMPP)
+- Node.js & NPM
+
+### 2. Setup Instructions
+
+1. **Clone the repository**:
    ```bash
-   cd backend
+   git clone https://github.com/sreloeng15062023-blip/computer-shop-management-system.git
+   cd computer-shop-management-system
    ```
 
-2. Install PHP dependencies:
+2. **Install PHP dependencies**:
    ```bash
    composer install
    ```
 
-3. Configure environment variables:
+3. **Configure environment**:
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
-   *Make sure your database settings in `.env` match your MySQL server:*
+   *Make sure your database credentials in `.env` match your local MySQL server:*
    ```ini
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -93,41 +75,23 @@ computer-shop-management-system/
    DB_PASSWORD=
    ```
 
-4. Run database migrations and seeders:
+4. **Run migrations and seed default data**:
    ```bash
    php artisan migrate --seed
    ```
 
-5. Start the backend development server:
+5. **Start the Laravel server**:
    ```bash
    php artisan serve
    ```
-   *API will run at: `http://127.0.0.1:8000` (e.g. `http://127.0.0.1:8000/api/`)*
+   *Open your browser at: **`http://127.0.0.1:8000`***
 
 ---
 
-### 2. Frontend Setup (React / Vite)
+## 🔑 Demo User Accounts (Password: `password123`)
 
-1. In a new terminal, navigate to `frontend/`:
-   ```bash
-   cd frontend
-   ```
-
-2. Configure environment:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. Install dependencies and start the dev server:
-   ```bash
-   npm install
-   npm run dev
-   ```
-   *Frontend will run at: `http://localhost:5173`*
-
----
-
-### 3. API Documentation & Specifications
-- Requirements: [docs/requirements/topic_22_requirements.md](docs/requirements/topic_22_requirements.md)
-- Database ERD: [docs/database/](docs/database/)
-- Postman Collection: [docs/postman/](docs/postman/)
+| Role | Email | Password | Access Level |
+| :--- | :--- | :--- | :--- |
+| **👑 Admin** | `admin@shop.com` | `password123` | Full access to all 16 modules & settings |
+| **💳 Cashier** | `cashier@shop.com` | `password123` | POS Sales, Checkout, Payments, Receipts |
+| **🔧 Technician** | `tech@shop.com` | `password123` | Repair tracking, diagnosis, parts used |

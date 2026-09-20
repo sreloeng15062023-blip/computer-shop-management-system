@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Api\AuthController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group.
+|
+*/
+
+// =========================================================================
+// 1. Module: User Authentication (Topic 22 - Section 1)
+// =========================================================================
+Route::prefix('auth')->group(function () {
+    // Public endpoint: Authenticate user & issue Bearer Token
+    Route::post('/login', [AuthController::class, 'login']);
+
+    // Protected endpoints: Accessible only with valid Sanctum Bearer Token
+    Route::middleware('auth:sanctum')->group(function () {
+        // Fetch profile and role of currently logged-in user
+        Route::get('/user', [AuthController::class, 'user']);
+        Route::get('/me', [AuthController::class, 'user']); // Alias
+
+        // Revoke active token and log out
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+});
+
+// =========================================================================
+// 2. Role Management API (RBAC)
+// =========================================================================
+// Standard REST API endpoints: GET, POST, PUT, DELETE for /api/roles
+Route::apiResource('roles', RoleController::class);
