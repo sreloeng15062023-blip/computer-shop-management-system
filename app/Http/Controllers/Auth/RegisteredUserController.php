@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -39,10 +40,16 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Assign default role (e.g. Cashier or Sale Staff) to newly registered users
+        $defaultRole = Role::where('role_name', 'Cashier')->first()
+            ?? Role::where('role_name', 'Sale Staff')->first()
+            ?? Role::first();
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => $defaultRole ? $defaultRole->id : null,
         ]);
 
         event(new Registered($user));

@@ -34,6 +34,8 @@
         @endif
 
         <!-- Validation Errors Display -->
+        {{-- If the user leaves the email empty or types an invalid format (e.g. abc),
+         Laravel stops execution immediately and redirects back to the login page with an error message. --}}
         @if ($errors->any())
         <div class="mb-4 p-2.5 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl text-left">
             <i class="fa-solid fa-circle-exclamation mr-1"></i> {{ $errors->first() }}
@@ -75,29 +77,8 @@
             </button>
         </form>
 
-        <!-- Quick-Fill Demo Buttons for Easy Testing -->
-        <div class="mt-6 pt-4 border-t border-gray-200">
-            <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2">
-                Demo Accounts (<span class="font-mono text-gray-600">password123</span>):
-            </p>
-            <div class="grid grid-cols-3 gap-1.5">
-                <button type="button" onclick="fillForm('admin@shop.com', 'password123')"
-                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition">
-                    👑 Admin
-                </button>
-                <button type="button" onclick="fillForm('cashier@shop.com', 'password123')"
-                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition">
-                    💳 Cashier
-                </button>
-                <button type="button" onclick="fillForm('tech@shop.com', 'password123')"
-                    class="py-1.5 px-1 text-[11px] font-medium rounded-lg border border-gray-200 text-gray-700 bg-gray-50 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition">
-                    🔧 Tech
-                </button>
-            </div>
-        </div>
-
         <!-- Social Platform Buttons -->
-        <div class="mt-5">
+        <div class="mt-6 pt-4 border-t border-gray-200">
             <p class="text-[11px] text-gray-400 mb-2">or login with social platform</p>
             <div class="flex justify-center items-center gap-3">
                 <a href="{{ route('social.login', 'google') }}" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-red-50 hover:border-red-500 transition">
@@ -112,19 +93,11 @@
             </div>
         </div>
 
-        <div class="mt-4 text-xs text-gray-600">
+        <div class="mt-5 text-xs text-gray-600">
             Don't have an account? <a href="{{ route('register') }}" class="text-blue-600 font-semibold hover:underline">Register</a>
         </div>
 
     </div>
-
-    <!-- Quick-Fill Script -->
-    <script>
-        function fillForm(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-        }
-    </script>
 </body>
 
 </html>
