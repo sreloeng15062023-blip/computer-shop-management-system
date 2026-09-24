@@ -1,653 +1,562 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Brand Management – Computer Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Management - TECHZONE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #f2f5f4;
-            --surface: #fff;
-            --ink: #16211f;
-            --muted: #5d6b68;
-            --line: #d6dedc;
-            --accent: #0e7c66;
-            --accent-ink: #fff;
-            --soft: #e2f1ed;
-            --danger: #b42318;
-            --warn: #b45309;
-            box-sizing: border-box;
-            padding-top: env(safe-area-inset-top, 0px);
-            padding-bottom: env(safe-area-inset-bottom, 0px)
-        }
-
-        @media(prefers-color-scheme:dark) {
-            :root:not([data-theme="light"]) {
-                --bg: #0f1716;
-                --surface: #172321;
-                --ink: #e6efed;
-                --muted: #93a5a1;
-                --line: #2a3b38;
-                --accent: #3fc2a3;
-                --accent-ink: #06211b;
-                --soft: #1d3833;
-                --danger: #f97066;
-                --warn: #f5a54a
-            }
-        }
-
-        :root[data-theme="dark"] {
-            --bg: #0f1716;
-            --surface: #172321;
-            --ink: #e6efed;
-            --muted: #93a5a1;
-            --line: #2a3b38;
-            --accent: #3fc2a3;
-            --accent-ink: #06211b;
-            --soft: #1d3833;
-            --danger: #f97066;
-            --warn: #f5a54a
-        }
-
-        * {
-            box-sizing: border-box
-        }
-
-        html {
-            scroll-padding-top: env(safe-area-inset-top, 0px)
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--ink);
-            font: 400 15px/1.5 Figtree, system-ui, sans-serif
-        }
-
-        h1,
-        h2 {
-            font-family: "Bricolage Grotesque", Figtree, sans-serif;
-            margin: 0;
-            letter-spacing: -.01em
-        }
-
-        .wrap {
-            max-width: 1080px;
-            margin: 0 auto;
-            padding: 24px 16px 48px
-        }
-
-        header {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 20px
-        }
-
-        h1 {
-            font-size: clamp(28px, 5vw, 40px);
-            line-height: 1.1
-        }
-
-        header p {
-            margin: 4px 0 0;
-            color: var(--muted)
-        }
-
-        button {
-            font: inherit;
-            cursor: pointer;
-            border-radius: 8px;
-            border: 1px solid var(--line);
-            background: var(--surface);
-            color: var(--ink);
-            padding: 8px 14px
-        }
-
-        button:hover {
-            border-color: var(--accent)
-        }
-
-        button:focus-visible,
-        input:focus-visible,
-        select:focus-visible,
-        textarea:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px
-        }
-
-        .primary {
-            background: var(--accent);
-            color: var(--accent-ink);
-            border-color: var(--accent);
-            font-weight: 600
-        }
-
-        .danger {
-            color: var(--danger)
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px
-        }
-
-        .stat {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 14px 16px
-        }
-
-        .stat b {
-            display: block;
-            font: 700 30px/1.1 "Bricolage Grotesque", sans-serif
-        }
-
-        .stat span {
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 16px
-        }
-
-        .panel h2 {
-            font-size: 18px;
-            margin-bottom: 12px
-        }
-
-        .bars {
-            display: grid;
-            gap: 10px
-        }
-
-        .bar {
-            display: grid;
-            grid-template-columns: 110px 1fr 56px;
-            gap: 10px;
-            align-items: center;
-            font-size: 14px
-        }
-
-        .track {
-            height: 14px;
-            background: var(--soft);
-            border-radius: 4px;
-            overflow: hidden
-        }
-
-        .fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 4px;
-            transition: width .5s
-        }
-
-        .bar em {
-            font-style: normal;
-            text-align: right;
-            color: var(--muted)
-        }
-
-        .tools {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px
-        }
-
-        input,
-        select,
-        textarea {
-            font: inherit;
-            color: var(--ink);
-            background: var(--bg);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 8px 10px;
-            width: 100%
-        }
-
-        .tools input {
-            flex: 1 1 220px;
-            width: auto
-        }
-
-        .tools select {
-            width: auto
-        }
-
-        .scroll {
-            overflow-x: auto
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 640px
-        }
-
-        th,
-        td {
-            text-align: left;
-            padding: 10px 8px;
-            border-bottom: 1px solid var(--line);
-            vertical-align: middle
-        }
-
-        th {
-            font-weight: 600;
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        td.n {
-            font-variant-numeric: tabular-nums
-        }
-
-        .name {
-            font-weight: 600
-        }
-
-        .desc {
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 99px;
-            font-size: 12px;
-            font-weight: 600;
-            background: var(--soft);
-            color: var(--accent)
-        }
-
-        .badge.off {
-            background: transparent;
-            border: 1px solid var(--line);
-            color: var(--muted)
-        }
-
-        td.act {
-            white-space: nowrap;
-            text-align: right
-        }
-
-        td.act button {
-            padding: 5px 10px;
-            font-size: 13px
-        }
-
-        .empty {
-            padding: 28px;
-            text-align: center;
-            color: var(--muted)
-        }
-
-        dialog {
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            background: var(--surface);
-            color: var(--ink);
-            padding: 22px;
-            width: min(440px, 92vw)
-        }
-
-        dialog::backdrop {
-            background: rgba(0, 0, 0, .45)
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            font-size: 13px;
-            margin: 12px 0 4px
-        }
-
-        .row {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            margin-top: 18px
-        }
-
-        .err {
-            color: var(--danger);
-            font-size: 13px;
-            min-height: 18px;
-            margin-top: 6px
-        }
-
-        #toast {
-            position: fixed;
-            left: 50%;
-            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-            transform: translateX(-50%);
-            background: var(--ink);
-            color: var(--bg);
-            padding: 10px 16px;
-            border-radius: 8px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .2s
-        }
-
-        #toast.show {
-            opacity: 1
-        }
-
-        @media(max-width:700px) {
-            .stats {
-                grid-template-columns: repeat(2, 1fr)
-            }
-
-            .bar {
-                grid-template-columns: 80px 1fr 44px
-            }
-        }
-
-        @media(prefers-reduced-motion:reduce) {
-            * {
-                transition: none !important
-            }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
 
-<body>
-    <div class="wrap">
-        <header>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- ========================================== -->
+        <!-- 1. SIDEBAR (TECHZONE Theme)                -->
+        <!-- ========================================== -->
+        <aside class="w-64 bg-[#0f172a] text-slate-300 flex flex-col justify-between shrink-0 shadow-xl overflow-y-auto">
             <div>
-                <h1>Brands</h1>
-                <p>Manufacturers and labels the shop stocks, with what each one contributes to inventory.</p>
-            </div>
-            <button class="primary" id="addBtn">Add brand</button>
-        </header>
+                <!-- Logo -->
+                <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800/80">
+                    <div class="bg-blue-600 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-600/30">
+                        <i class="fa-solid fa-desktop text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="font-extrabold text-lg text-white tracking-wider leading-none">TECHZONE</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Computer Shop Management</div>
+                    </div>
+                </div>
 
-        <section class="stats" id="stats" aria-label="Brand summary"></section>
+                <!-- Navigation Menu -->
+                <nav class="p-4 space-y-1.5 text-sm font-medium">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-house w-5 text-center"></i> Dashboard
+                    </a>
 
-        <section class="panel">
-            <h2>Stock units by brand</h2>
-            <div class="bars" id="bars"></div>
-        </section>
+                    <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('products.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-boxes-stacked w-5 text-center"></i> Product Management
+                    </a>
 
-        <section class="panel">
-            <div class="tools">
-                <input id="q" type="search" placeholder="Search by name, country or description" aria-label="Search brands">
-                <select id="filter" aria-label="Filter by status">
-                    <option value="">All statuses</option>
-                    <option>Active</option>
-                    <option>Inactive</option>
-                </select>
+                    <!-- Active Brand Management -->
+                    <a href="{{ route('brands.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30">
+                        <i class="fa-solid fa-tags w-5 text-center"></i> Brand Management
+                    </a>
+
+                    <a href="{{ route('suppliers') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-truck-fast w-5 text-center"></i> Supplier Management
+                    </a>
+
+                    <a href="{{ route('customers') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-users w-5 text-center"></i> Customer Management
+                    </a>
+
+                    <a href="{{ route('purchases') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-cart-shopping w-5 text-center"></i> Purchase Management
+                    </a>
+
+                    <a href="{{ route('pos.sales') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-cash-register w-5 text-center"></i> Sales Management (POS)
+                    </a>
+
+                    <a href="{{ route('inventory') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-warehouse w-5 text-center"></i> Inventory Management
+                    </a>
+
+                    <a href="{{ route('repair.service') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-wrench w-5 text-center"></i> Repair Service Management
+                    </a>
+
+                    <a href="{{ route('warranty') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-shield-halved w-5 text-center"></i> Warranty Management
+                    </a>
+
+                    <a href="{{ route('invoices') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i> Payment & Invoice
+                    </a>
+
+                    <a href="{{ route('employees') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-user-gear w-5 text-center"></i> Employee Management
+                    </a>
+
+                    <a href="{{ route('reports') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-chart-line w-5 text-center"></i> Report Management
+                    </a>
+
+                    <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-bell w-5 text-center"></i> Notification
+                    </a>
+
+                    <a href="{{ route('settings') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-gear w-5 text-center"></i> Settings
+                    </a>
+                </nav>
             </div>
-            <div class="scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Brand</th>
-                            <th>Country</th>
-                            <th>Products</th>
-                            <th>Stock</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="rows"></tbody>
-                </table>
+        </aside>
+
+        <!-- ========================================== -->
+        <!-- 2. MAIN CONTENT AREA                       -->
+        <!-- ========================================== -->
+        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50">
+
+            <!-- Top Header Navbar -->
+            <header class="bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-xs">
+                <!-- Search Input -->
+                <div class="w-80 relative">
+                    <input type="text" placeholder="Search..." class="w-full pl-10 pr-4 py-2 bg-slate-100/80 border border-transparent rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                </div>
+
+                <!-- Top Icons & User Profile -->
+                <div class="flex items-center gap-4">
+                    <button class="relative p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-xl transition">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+
+                    <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
+                        <div class="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
+                            {{ strtoupper(substr(Auth::user()->name ?? 'Admin', 0, 2)) }}
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-800 leading-tight">{{ Auth::user()->name ?? 'Admin' }}</div>
+                            <div class="text-[11px] font-medium text-slate-400 leading-tight">
+                                {{ Auth::user()->role->role_name ?? 'Administrator' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content Body -->
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-6">
+
+                <!-- Alert Messages (Success / Error) -->
+                @if (session('success'))
+                    <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl shadow-xs">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                            <span class="text-sm font-medium">{{ session('success') }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 text-sm"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl shadow-xs">
+                        <div class="flex items-center gap-2 mb-2 font-semibold text-sm">
+                            <i class="fa-solid fa-circle-exclamation text-rose-600"></i> មានបញ្ហាក្នុងការបញ្ចូលទិន្នន័យ៖
+                        </div>
+                        <ul class="list-disc list-inside text-xs space-y-1 text-rose-700">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Brand Management Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-tags text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">Brand Management</h1>
+                            <p class="text-sm text-slate-500">Manage your product brands</p>
+                        </div>
+                    </div>
+
+                    <!-- + Add Brand Button -->
+                    <button onclick="openAddModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg transition active:scale-95">
+                        <i class="fa-solid fa-plus text-xs"></i> Add Brand
+                    </button>
+                </div>
+
+                <!-- Filter & Search Card -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                    <form method="GET" action="{{ route('brands.index') }}" class="flex flex-col md:flex-row items-center gap-4">
+                        <!-- Search Box -->
+                        <div class="flex-1 w-full relative">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search brand name..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div class="w-full md:w-48">
+                            <select name="status" onchange="this.form.submit()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                                <option value="">All Status</option>
+                                <option value="Active" {{ request('status') === 'Active' ? 'selected' : '' }}>Active</option>
+                                <option value="Inactive" {{ request('status') === 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <a href="{{ route('brands.index') }}" class="w-full md:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-rotate-left text-xs"></i> Reset
+                        </a>
+                    </form>
+                </div>
+
+                <!-- Brands Data Table Card -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/75 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="py-4 px-6 text-center w-16">#</th>
+                                    <th class="py-4 px-6">Brand Name</th>
+                                    <th class="py-4 px-6">Country</th>
+                                    <th class="py-4 px-6">Description</th>
+                                    <th class="py-4 px-6 text-center">Status</th>
+                                    <th class="py-4 px-6">Created At</th>
+                                    <th class="py-4 px-6 text-center w-36">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                @forelse ($brands as $index => $brand)
+                                    <tr class="hover:bg-slate-50/60 transition group">
+                                        <!-- Row Number -->
+                                        <td class="py-4 px-6 text-center font-medium text-slate-400">
+                                            {{ $brands->firstItem() + $index }}
+                                        </td>
+
+                                        <!-- Brand Name with Icon/Initial -->
+                                        <td class="py-4 px-6 font-bold text-slate-900">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 font-extrabold flex items-center justify-center text-xs shadow-2xs">
+                                                    {{ strtoupper(substr($brand->brand_name, 0, 2)) }}
+                                                </div>
+                                                <span>{{ $brand->brand_name }}</span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Country -->
+                                        <td class="py-4 px-6 text-slate-600 font-medium">
+                                            {{ $brand->country ?? '—' }}
+                                        </td>
+
+                                        <!-- Description -->
+                                        <td class="py-4 px-6 text-slate-500 max-w-xs truncate" title="{{ $brand->description }}">
+                                            {{ $brand->description ?? 'No description provided' }}
+                                        </td>
+
+                                        <!-- Status Badge -->
+                                        <td class="py-4 px-6 text-center">
+                                            @if ($brand->status === 'Active')
+                                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/60">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Inactive
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        <!-- Created At -->
+                                        <td class="py-4 px-6 text-slate-500 text-xs font-medium">
+                                            {{ $brand->created_at ? $brand->created_at->format('Y-m-d H:i') : '—' }}
+                                        </td>
+
+                                        <!-- Actions (View, Edit, Delete) -->
+                                        <td class="py-4 px-6 text-center">
+                                            <div class="flex items-center justify-center gap-1.5">
+                                                <!-- View Button -->
+                                                <button onclick="openViewModal({{ json_encode($brand) }})" class="w-8 h-8 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center transition shadow-2xs" title="View Details">
+                                                    <i class="fa-solid fa-eye text-xs"></i>
+                                                </button>
+
+                                                <!-- Edit Button -->
+                                                <button onclick="openEditModal({{ json_encode($brand) }})" class="w-8 h-8 rounded-lg bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center transition shadow-2xs" title="Edit Brand">
+                                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                                </button>
+
+                                                <!-- Delete Button -->
+                                                <button onclick="openDeleteModal('{{ $brand->id }}', '{{ addslashes($brand->brand_name) }}')" class="w-8 h-8 rounded-lg bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center transition shadow-2xs" title="Delete Brand">
+                                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="py-12 text-center text-slate-400">
+                                            <i class="fa-solid fa-tags text-4xl mb-3 block text-slate-300"></i>
+                                            <p class="font-medium">រកមិនឃើញទិន្នន័យ Brand ឡើយ។</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Footer -->
+                    <div class="px-6 py-4 border-t border-slate-200/80 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-xs text-slate-500">
+                            Showing <span class="font-semibold text-slate-700">{{ $brands->firstItem() ?? 0 }}</span> to <span class="font-semibold text-slate-700">{{ $brands->lastItem() ?? 0 }}</span> of <span class="font-semibold text-slate-700">{{ $brands->total() }}</span> entries
+                        </div>
+                        <div>
+                            {{ $brands->links() }}
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="empty" id="empty" hidden>No brands match your search.</div>
-        </section>
+        </main>
     </div>
 
-    <dialog id="form">
-        <h2 id="formTitle">Add brand</h2>
-        <label for="fName">Brand name</label>
-        <input id="fName" maxlength="50" autocomplete="off">
-        <label for="fCountry">Country</label>
-        <input id="fCountry" maxlength="50" autocomplete="off">
-        <label for="fDesc">Description</label>
-        <textarea id="fDesc" rows="3"></textarea>
-        <label for="fStatus">Status</label>
-        <select id="fStatus">
-            <option>Active</option>
-            <option>Inactive</option>
-        </select>
-        <div class="err" id="err" role="alert"></div>
-        <div class="row"><button id="cancel">Cancel</button><button class="primary" id="save">Save</button></div>
-    </dialog>
+    <!-- ========================================== -->
+    <!-- 3. ADD BRAND MODAL                         -->
+    <!-- ========================================== -->
+    <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center text-sm shadow-sm">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 leading-tight">Add New Brand</h3>
+                        <p class="text-xs text-slate-500">Create a new brand for your products</p>
+                    </div>
+                </div>
+                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
 
-    <dialog id="confirm">
-        <h2>Delete brand</h2>
-        <p id="confirmMsg"></p>
-        <div class="row"><button id="noDel">Cancel</button><button class="primary danger" id="yesDel" style="background:var(--danger);color:#fff;border-color:var(--danger)">Delete</button></div>
-    </dialog>
-    <div id="toast" role="status"></div>
+            <!-- Form -->
+            <form method="POST" action="{{ route('brands.store') }}" class="p-6 space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Brand Name <span class="text-rose-500">*</span></label>
+                    <input type="text" name="brand_name" required placeholder="Enter brand name" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                </div>
 
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Country</label>
+                    <input type="text" name="country" placeholder="Enter country (e.g. Taiwan, USA)" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Description</label>
+                    <textarea name="description" rows="3" placeholder="Enter description (optional)" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status</label>
+                    <select name="status" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="closeAddModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl transition">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-blue-600/20 transition">Save Brand</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. EDIT BRAND MODAL                        -->
+    <!-- ========================================== -->
+    <div id="editModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-sky-500 text-white rounded-xl flex items-center justify-center text-sm shadow-sm">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 leading-tight">Edit Brand</h3>
+                        <p class="text-xs text-slate-500">Update brand information</p>
+                    </div>
+                </div>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Form -->
+            <form id="editForm" method="POST" action="" class="p-6 space-y-4">
+                @csrf
+                @method('PUT')
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Brand Name <span class="text-rose-500">*</span></label>
+                    <input type="text" id="edit_brand_name" name="brand_name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Country</label>
+                    <input type="text" id="edit_country" name="country" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Description</label>
+                    <textarea id="edit_description" name="description" rows="3" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status</label>
+                    <select id="edit_status" name="status" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl transition">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-blue-600/20 transition">Update Brand</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. VIEW BRAND DETAILS MODAL                -->
+    <!-- ========================================== -->
+    <div id="viewModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-xl shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/60">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center text-sm shadow-sm">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900">Brand Details</h3>
+                </div>
+                <button onclick="closeViewModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                    <div class="flex items-center gap-3">
+                        <div id="view_avatar" class="w-12 h-12 rounded-xl bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shadow-sm">
+                            B
+                        </div>
+                        <div>
+                            <div id="view_brand_name" class="font-bold text-lg text-slate-900">ASUS</div>
+                            <div id="view_country" class="text-xs text-slate-500">Taiwan</div>
+                        </div>
+                    </div>
+                    <div id="view_status_badge">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-sm">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Description</span>
+                        <p id="view_description" class="text-slate-700 bg-slate-50/50 p-3 rounded-xl border border-slate-100 mt-1">No description provided.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Created At</span>
+                            <span id="view_created_at" class="text-slate-700 font-medium">—</span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Created By</span>
+                            <span class="text-slate-700 font-medium">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 flex justify-end">
+                    <button onclick="closeViewModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">Back to List</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 6. DELETE CONFIRMATION MODAL               -->
+    <!-- ========================================== -->
+    <div id="deleteModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-slate-200 overflow-hidden text-center p-6">
+            <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Delete Brand</h3>
+            <p class="text-sm text-slate-500 mt-1">
+                Are you sure you want to delete this brand?<br>
+                "<span id="del_brand_name" class="font-bold text-slate-800"></span>"<br>
+                <span class="text-xs text-rose-500 font-medium">This action cannot be undone.</span>
+            </p>
+
+            <form id="deleteForm" method="POST" action="" class="mt-6 flex items-center justify-center gap-3">
+                @csrf
+                @method('DELETE')
+                <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">Cancel</button>
+                <button type="submit" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-rose-600/20 transition">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 7. MODAL JAVASCRIPT CONTROLLERS            -->
+    <!-- ========================================== -->
     <script>
-        // Seed data mirrors the INSERTs in assignment_y2s2_web_app_framework.sql (brands + products)
-        let nextId = 5;
-        let brands = [{
-                BrandID: 1,
-                BrandName: 'ASUS',
-                Country: 'Taiwan',
-                Description: 'Gaming laptops and hardware',
-                Status: 'Active',
-                CreatedAt: '2026-09-01'
-            },
-            {
-                BrandID: 2,
-                BrandName: 'Dell',
-                Country: 'USA',
-                Description: 'Business computers and monitors',
-                Status: 'Active',
-                CreatedAt: '2026-09-01'
-            },
-            {
-                BrandID: 3,
-                BrandName: 'Logitech',
-                Country: 'Switzerland',
-                Description: 'Computer peripherals and accessories',
-                Status: 'Active',
-                CreatedAt: '2026-09-01'
-            },
-            {
-                BrandID: 4,
-                BrandName: 'Kingston',
-                Country: 'USA',
-                Description: 'RAM and storage devices',
-                Status: 'Active',
-                CreatedAt: '2026-09-01'
-            }
-        ];
-        const products = [{
-                BrandID: 1,
-                StockQuantity: 10
-            }, {
-                BrandID: 3,
-                StockQuantity: 25
-            },
-            {
-                BrandID: 2,
-                StockQuantity: 8
-            }, {
-                BrandID: 4,
-                StockQuantity: 30
-            }
-        ];
-        const $ = id => document.getElementById(id);
-        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;'
-        } [c]));
-        const usage = id => products.filter(p => p.BrandID === id).reduce((a, p) => ({
-            n: a.n + 1,
-            stock: a.stock + p.StockQuantity
-        }), {
-            n: 0,
-            stock: 0
-        });
-        let editingId = null,
-            deletingId = null;
-
-        function toast(msg) {
-            const t = $('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(toast.t);
-            toast.t = setTimeout(() => t.classList.remove('show'), 2200)
+        // --- Add Modal ---
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
         }
 
-        function renderStats() {
-            const active = brands.filter(b => b.Status === 'Active').length;
-            const linked = new Set(products.map(p => p.BrandID)).size;
-            const stock = products.reduce((a, p) => a + p.StockQuantity, 0);
-            const items = [
-                [brands.length, 'Total brands'],
-                [active, 'Active'],
-                [brands.length - active, 'Inactive'],
-                [stock, 'Units in stock']
-            ];
-            $('stats').innerHTML = items.map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+        // --- Edit Modal ---
+        function openEditModal(brand) {
+            document.getElementById('editForm').action = '/brands/' + brand.id;
+            document.getElementById('edit_brand_name').value = brand.brand_name || '';
+            document.getElementById('edit_country').value = brand.country || '';
+            document.getElementById('edit_description').value = brand.description || '';
+            document.getElementById('edit_status').value = brand.status || 'Active';
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
         }
 
-        function renderBars() {
-            const data = brands.map(b => ({
-                name: b.BrandName,
-                stock: usage(b.BrandID).stock
-            })).sort((a, b) => b.stock - a.stock);
-            const max = Math.max(1, ...data.map(d => d.stock));
-            $('bars').innerHTML = data.length ? data.map(d => `<div class="bar"><span>${esc(d.name)}</span><div class="track"><div class="fill" style="width:${d.stock/max*100}%"></div></div><em>${d.stock}</em></div>`).join('') : '<div class="empty">No brands yet.</div>';
-        }
-
-        function renderTable() {
-            const q = $('q').value.trim().toLowerCase(),
-                f = $('filter').value;
-            const list = brands.filter(b => (!f || b.Status === f) && (!q || [b.BrandName, b.Country, b.Description].join(' ').toLowerCase().includes(q)));
-            $('rows').innerHTML = list.map(b => {
-                const u = usage(b.BrandID);
-                return `<tr>
-    <td><div class="name">${esc(b.BrandName)}</div><div class="desc">${esc(b.Description)}</div></td>
-    <td>${esc(b.Country)||'–'}</td><td class="n">${u.n}</td><td class="n">${u.stock}</td>
-    <td><span class="badge ${b.Status==='Active'?'':'off'}">${b.Status}</span></td>
-    <td class="n">${b.CreatedAt}</td>
-    <td class="act"><button data-edit="${b.BrandID}">Edit</button> <button class="danger" data-del="${b.BrandID}">Delete</button></td></tr>`
-            }).join('');
-            $('empty').hidden = list.length > 0;
-        }
-
-        function render() {
-            renderStats();
-            renderBars();
-            renderTable()
-        }
-
-        function openForm(id) {
-            editingId = id ?? null;
-            const b = brands.find(x => x.BrandID === id) || {
-                BrandName: '',
-                Country: '',
-                Description: '',
-                Status: 'Active'
-            };
-            $('formTitle').textContent = id ? 'Update brand' : 'Add brand';
-            $('fName').value = b.BrandName;
-            $('fCountry').value = b.Country || '';
-            $('fDesc').value = b.Description || '';
-            $('fStatus').value = b.Status;
-            $('err').textContent = '';
-            $('form').showModal();
-            $('fName').focus();
-        }
-
-        function save() {
-            const name = $('fName').value.trim();
-            if (!name) {
-                $('err').textContent = 'Brand name is required.';
-                return
-            }
-            if (brands.some(b => b.BrandName.toLowerCase() === name.toLowerCase() && b.BrandID !== editingId)) {
-                $('err').textContent = 'A brand with this name already exists.';
-                return
-            }
-            const data = {
-                BrandName: name,
-                Country: $('fCountry').value.trim(),
-                Description: $('fDesc').value.trim(),
-                Status: $('fStatus').value
-            };
-            if (editingId) {
-                Object.assign(brands.find(b => b.BrandID === editingId), data);
-                toast('Brand updated')
+        // --- View Modal ---
+        function openViewModal(brand) {
+            document.getElementById('view_brand_name').textContent = brand.brand_name;
+            document.getElementById('view_country').textContent = brand.country || 'No country specified';
+            document.getElementById('view_description').textContent = brand.description || 'No description provided.';
+            document.getElementById('view_avatar').textContent = (brand.brand_name || 'B').substring(0, 2).toUpperCase();
+            document.getElementById('view_created_at').textContent = brand.created_at ? new Date(brand.created_at).toLocaleString() : '—';
+            
+            const badge = document.getElementById('view_status_badge');
+            if (brand.status === 'Active') {
+                badge.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>';
             } else {
-                brands.push({
-                    BrandID: nextId++,
-                    ...data,
-                    CreatedAt: new Date().toISOString().slice(0, 10)
-                });
-                toast('Brand added')
+                badge.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Inactive</span>';
             }
-            $('form').close();
-            render();
+            document.getElementById('viewModal').classList.remove('hidden');
+        }
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.add('hidden');
         }
 
-        function askDelete(id) {
-            const b = brands.find(x => x.BrandID === id),
-                u = usage(id);
-            deletingId = id;
-            if (u.n) {
-                $('confirmMsg').textContent = `${b.BrandName} is used by ${u.n} product(s), so it can't be deleted. Set it to Inactive instead.`;
-                $('yesDel').hidden = true;
-            } else {
-                $('confirmMsg').textContent = `Delete ${b.BrandName}? This can't be undone.`;
-                $('yesDel').hidden = false;
-            }
-            $('confirm').showModal();
+        // --- Delete Modal ---
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteForm').action = '/brands/' + id;
+            document.getElementById('del_brand_name').textContent = name;
+            document.getElementById('deleteModal').classList.remove('hidden');
         }
-
-        $('addBtn').onclick = () => openForm();
-        $('cancel').onclick = () => $('form').close();
-        $('save').onclick = save;
-        $('form').addEventListener('keydown', e => {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                e.preventDefault();
-                save()
-            }
-        });
-        $('noDel').onclick = () => $('confirm').close();
-        $('yesDel').onclick = () => {
-            brands = brands.filter(b => b.BrandID !== deletingId);
-            $('confirm').close();
-            render();
-            toast('Brand deleted')
-        };
-        $('rows').onclick = e => {
-            const t = e.target.closest('button');
-            if (!t) return;
-            if (t.dataset.edit) openForm(+t.dataset.edit);
-            if (t.dataset.del) askDelete(+t.dataset.del);
-        };
-        $('q').oninput = renderTable;
-        $('filter').onchange = renderTable;
-        render();
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
     </script>
 </body>
 
