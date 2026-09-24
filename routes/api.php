@@ -50,7 +50,7 @@ Route::apiResource('brands', BrandController::class);// បន្ថែមពេ
 
 
 // 4. Supplier Management API // បន្ថែមពេលធ្វើsupplier management
-Route::apiResource('suppliers', SupplierController::class);
+Route::apiResource('suppliers', SupplierController::class)->names('api.suppliers');
 
 
 

@@ -67,9 +67,8 @@ Route::middleware(['auth'])->group(function () {
    Route::resource('brands', BrandController::class); // បន្ថែមពេលបង្កើតbrand management
 
     // 5. Suppliers
-   //Route::resource('suppliers', SupplierController::class);
     Route::resource('suppliers', SupplierController::class);
-    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers'); // Alias សម្រាប់ការពារកុំឱ្យបាក់ Link ចាស់
+    Route::get('/supplier-list', [SupplierController::class, 'index'])->name('suppliers'); // Alias fallback
     // 6. Customers
     Route::get('/customers', function () {
         return view('empty');

@@ -40,7 +40,7 @@
                         <i class="fa-solid fa-copyright w-5"></i> Brands
                     </a>
 
-                    <a href="{{ route('suppliers') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <a href="{{ route('suppliers.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
                         <i class="fa-solid fa-truck-field w-5"></i> Suppliers
                     </a>
 

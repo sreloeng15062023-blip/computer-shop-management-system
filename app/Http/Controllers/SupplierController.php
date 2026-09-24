@@ -23,7 +23,8 @@ class SupplierController extends Controller
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('contact_name', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
             });
         }
 
@@ -32,15 +33,20 @@ class SupplierController extends Controller
             $query->where('status', $request->status);
         }
 
-        // ទាញទិន្នន័យចុងក្រោយគេបង្អស់ និងចែកទំព័រ (10 ក្នុងមួយទំព័រ)
+        // ទាញទិន្នន័យចែកទំព័រ (10 ក្នុងមួយទំព័រ)
         $suppliers = $query->latest()->paginate(10)->withQueryString();
+
+        // គណនាស្ថិតិសម្រាប់បង្ហាញលើ Cards ទាំង ៤
+        $totalSuppliers = Supplier::count();
+        $activeSuppliers = Supplier::where('status', 'Active')->count();
+        $inactiveSuppliers = Supplier::where('status', 'Inactive')->count();
 
         // Support សម្រាប់ Postman JSON API
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json(['status' => true, 'data' => $suppliers], 200);
         }
 
-        return view('suppliers', compact('suppliers'));
+        return view('suppliers', compact('suppliers', 'totalSuppliers', 'activeSuppliers', 'inactiveSuppliers'));
     }
 
     /**

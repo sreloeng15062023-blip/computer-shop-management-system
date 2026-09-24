@@ -26,7 +26,7 @@
                 <i class="fa-solid fa-copyright w-5 text-center"></i> Brands
             </a>
 
-            <a href="{{ route('suppliers') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition {{ request()->routeIs('suppliers') ? 'bg-blue-600 text-white font-semibold' : 'hover:bg-slate-800 hover:text-white' }}">
+            <a href="{{ route('suppliers.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition {{ request()->routeIs('suppliers.*') ? 'bg-blue-600 text-white font-semibold' : 'hover:bg-slate-800 hover:text-white' }}">
                 <i class="fa-solid fa-truck w-5 text-center"></i> Suppliers
             </a>
 
