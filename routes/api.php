@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\SupplierController;// បន្ថែមពេលធ្វើsupplier management
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,3 +46,11 @@ use App\Http\Controllers\BrandController; // បន្ថែមពេលបង�
 
 // 3. Brand Management API   // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
 Route::apiResource('brands', BrandController::class);// បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+
+
+
+// 4. Supplier Management API // បន្ថែមពេលធ្វើsupplier management
+Route::apiResource('suppliers', SupplierController::class);
+
+
+

@@ -3,6 +3,8 @@
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BrandController;// បន្ថែមពេលបង្កើត​brand management
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SupplierController;//បន្ថែមនៅពេលធ្វើsupplier management
+
 
 
 /*
@@ -65,10 +67,7 @@ Route::middleware(['auth'])->group(function () {
    Route::resource('brands', BrandController::class); // បន្ថែមពេលបង្កើតbrand management
 
     // 5. Suppliers
-    Route::get('/suppliers', function () {
-        return view('empty');
-    })->name('suppliers');
-
+   Route::resource('suppliers', SupplierController::class);
     // 6. Customers
     Route::get('/customers', function () {
         return view('empty');
