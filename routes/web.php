@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\BrandController;// បន្ថែមពេលបង្កើត​brand management
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,13 +53,16 @@ Route::middleware(['auth'])->group(function () {
     })->name('categories.create');
 
     // 4. Brands Management
-    Route::get('/brands', function () {
-        return view('empty');
-    })->name('brands.index');
-
-    Route::get('/brands/create', function () {
-        return view('empty');
-    })->name('brands.create');
+    
+    // ការប្រើ Route::resource('brands', ...) តែមួយបន្ទាត់ គឺ Laravel បង្កើត Routes ទាំង ៧ ដោយស្វ័យប្រវត្តិ៖
+    // GET /brands ➡️ brands.index (មើលបញ្ជី)
+    // GET /brands/create ➡️ brands.create (ទម្រង់បង្កើត)
+    // POST /brands ➡️ brands.store (កន្លែង Submit Form បង្កើត)
+    // GET /brands/{brand} ➡️ brands.show (មើលលម្អិត)
+    // GET /brands/{brand}/edit ➡️ brands.edit (ទម្រង់កែប្រែ)
+    // PUT/PATCH /brands/{brand} ➡️ brands.update (កន្លែង Submit Form កែប្រែ)
+    // DELETE /brands/{brand} ➡️ brands.destroy (កន្លែងលុប)
+   Route::resource('brands', BrandController::class); // បន្ថែមពេលបង្កើតbrand management
 
     // 5. Suppliers
     Route::get('/suppliers', function () {

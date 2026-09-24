@@ -39,3 +39,9 @@ Route::prefix('auth')->group(function () {
 // =========================================================================
 // Standard REST API endpoints: GET, POST, PUT, DELETE for /api/roles
 Route::apiResource('roles', RoleController::class);
+
+
+use App\Http\Controllers\BrandController; // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+
+// 3. Brand Management API   // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+Route::apiResource('brands', BrandController::class);// បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
