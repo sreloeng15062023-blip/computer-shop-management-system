@@ -52,5 +52,11 @@ Route::apiResource('brands', BrandController::class);// បន្ថែមពេ
 // 4. Supplier Management API // បន្ថែមពេលធ្វើsupplier management
 Route::apiResource('suppliers', SupplierController::class)->names('api.suppliers');
 
+use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ្វើ customer management
+
+// 5. Customer Management API // បន្ថែមពេលធ្វើ Customer Management ដើម្បីយកទៅតេស្ដលើ Postman
+Route::apiResource('customers', CustomerController::class)->names('api.customers');
+
+
 
 

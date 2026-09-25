@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\BrandController;// បន្ថែមពេលបង្កើត​brand management
+use App\Http\Controllers\BrandController; // បន្ថែមពេលបង្កើត brand management
+use App\Http\Controllers\SupplierController; // បន្ថែមពេលធ្វើ supplier management
+use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ្វើ customer management
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SupplierController;//បន្ថែមនៅពេលធ្វើsupplier management
 
 
 
@@ -69,10 +70,10 @@ Route::middleware(['auth'])->group(function () {
     // 5. Suppliers
     Route::resource('suppliers', SupplierController::class);
     Route::get('/supplier-list', [SupplierController::class, 'index'])->name('suppliers'); // Alias fallback
-    // 6. Customers
-    Route::get('/customers', function () {
-        return view('empty');
-    })->name('customers');
+
+    // 6. Customers (Customer Management)
+    Route::resource('customers', CustomerController::class);
+    Route::get('/customer-list', [CustomerController::class, 'index'])->name('customers'); // Alias fallback
 
     // 7. Purchases
     Route::get('/purchases', function () {
