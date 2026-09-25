@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\SupplierController;// បន្ថែមពេលធ្វើsupplier management
+use App\Http\Controllers\ProductController; // បន្ថែមពេលធ្វើ product management
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,5 +59,6 @@ use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ�
 Route::apiResource('customers', CustomerController::class)->names('api.customers');
 
 
-
+// 6. Product Management API // បន្ថែមពេលធ្វើ product management ដើម្បីយកទៅតេស្ដលើ Postman
+Route::apiResource('products', ProductController::class)->names('api.products');
 

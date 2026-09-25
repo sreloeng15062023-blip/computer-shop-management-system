@@ -35,5 +35,9 @@ class DatabaseSeeder extends Seeder
 
         // 5. Seed Customers (Retail & Wholesale customers)
         $this->call(CustomerSeeder::class);
+
+        // 6. Seed Categories & Products
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }
