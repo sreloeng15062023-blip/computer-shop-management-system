@@ -385,7 +385,7 @@ class PurchaseOrderController extends Controller
             $product->stock_quantity = $stockAfter;
 
             // ធ្វើបច្ចុប្បន្នភាព Status របស់ទំនិញ ប្រសិនបើមុននេះ Out of Stock
-            if ($stockAfter > ($product->min_stock_level ?? 5)) {
+            if ($stockAfter > ($product->min_stock_alert ?? 5)) {
                 $product->status = 'In Stock';
             } elseif ($stockAfter > 0) {
                 $product->status = 'Low Stock';

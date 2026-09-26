@@ -45,4 +45,6 @@ class Product extends Model
     public function primaryBarcode() { return $this->hasOne(Barcode::class)->where('is_primary', true); }
     public function purchaseOrderDetails() { return $this->hasMany(PurchaseOrderDetail::class); }
     public function inventoryTransactions() { return $this->hasMany(InventoryTransaction::class); }
+
+    public function getMinStockLevelAttribute() { return $this->min_stock_alert; }
 }

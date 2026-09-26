@@ -67,7 +67,7 @@ class InventoryTransactionController extends Controller
 
         // បញ្ជីទំនិញសម្រាប់ Modal កែសម្រួលស្តុក (Stock Adjustment Modal Dropdown)
         $products = Product::where('status', '!=', 'Discontinued')
-                           ->select('id', 'name', 'sku', 'stock_quantity', 'min_stock_level')
+                           ->select('id', 'name', 'sku', 'stock_quantity', 'min_stock_alert')
                            ->get();
 
         // ប្រសិនបើ Frontend ហៅតាម AJAX / API / Postman
@@ -85,7 +85,8 @@ class InventoryTransactionController extends Controller
             ], 200);
         }
 
-        return view('inventory-transactions', compact(
+        $viewName = view()->exists('inventory') ? 'inventory' : 'inventory-transactions';
+        return view($viewName, compact(
             'transactions',
             'products',
             'totalTransactions',
@@ -158,7 +159,7 @@ class InventoryTransactionController extends Controller
             // 2. Update ស្ថានភាព Product Status ស្វ័យប្រវត្តិ
             if ($stockAfter <= 0) {
                 $product->status = 'Out of Stock';
-            } elseif ($stockAfter <= ($product->min_stock_level ?? 5)) {
+            } elseif ($stockAfter <= ($product->min_stock_alert ?? 5)) {
                 $product->status = 'Low Stock';
             } else {
                 $product->status = 'In Stock';
