@@ -68,9 +68,24 @@ class PurchaseOrderController extends Controller
         $receivedOrders  = PurchaseOrder::where('status', 'Received')->count();
         $totalSpend      = PurchaseOrder::where('status', 'Received')->sum('total_amount');
 
-        // Dropdown Lists សម្រាប់ Filter
-        $suppliers = Supplier::where('status', 'Active')->select('id', 'name')->get();
+        // Dropdown Lists សម្រាប់ Filter & Form
+        $suppliers = Supplier::where('status', 'Active')->select('id', 'name', 'phone')->get();
         $products  = Product::where('status', '!=', 'Discontinued')->select('id', 'name', 'sku', 'cost_price', 'stock_quantity')->get();
+
+        // 5 ប័ណ្ណថ្មីបំផុតសម្រាប់ Recent Purchase Orders Widget
+        $recentOrders = PurchaseOrder::with('supplier')->latest('id')->take(6)->get();
+
+        // ក្រុមហ៊ុនផ្គត់ផ្គង់កំពូលទាំង ៥ (Top Suppliers Widget)
+        $topSuppliers = Supplier::where('status', 'Active')
+            ->withSum('purchaseOrders', 'total_amount')
+            ->orderByDesc('purchase_orders_sum_total_amount')
+            ->take(5)
+            ->get();
+
+        // លេខ PO បន្ទាប់ (ឧ. PO-2025-009 ឬ PO-2026-003)
+        $latestPo = PurchaseOrder::latest('id')->first();
+        $nextNum = $latestPo ? ((int)preg_replace('/[^0-9]/', '', substr($latestPo->po_number, -4))) + 1 : 1;
+        $suggestedPoNumber = 'PO-' . date('Y') . '-' . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
 
         // ប្រសិនបើ Frontend ហៅតាម AJAX / API / Postman
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -82,19 +97,25 @@ class PurchaseOrderController extends Controller
                     'pending_orders'  => $pendingOrders,
                     'received_orders' => $receivedOrders,
                     'total_spend'     => round($totalSpend, 2),
-                ]
+                ],
+                'recent_orders' => $recentOrders,
+                'top_suppliers' => $topSuppliers
             ], 200);
         }
 
         // បញ្ជូនទៅកាន់ Blade View
-        return view('purchase-orders', compact(
+        $viewName = view()->exists('purchases') ? 'purchases' : 'purchase-orders';
+        return view($viewName, compact(
             'purchaseOrders',
             'suppliers',
             'products',
             'totalOrders',
             'pendingOrders',
             'receivedOrders',
-            'totalSpend'
+            'totalSpend',
+            'recentOrders',
+            'topSuppliers',
+            'suggestedPoNumber'
         ));
     }
 
