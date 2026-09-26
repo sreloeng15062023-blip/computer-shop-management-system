@@ -12,7 +12,7 @@
 </head>
 
 <body class="h-screen w-full bg-cover bg-center flex items-center justify-end pr-8 sm:pr-14 lg:pr-24"
-    style="background-image: url('{{ asset('images/pc.png') }}');">
+    style="background-image:url('{{ asset('images/background.jpg') }}');">
 
     <!-- LOGIN CARD -->
     <div class="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center border border-white/60">
