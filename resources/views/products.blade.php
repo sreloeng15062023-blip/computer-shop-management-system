@@ -212,6 +212,18 @@ $navItems = [
                     <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
                 </div>
                 @endif
+                @if ($errors->any())
+                <div class="bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-sm flex flex-col gap-1.5 shadow-sm">
+                    <div class="flex items-center gap-2 font-bold text-rose-800">
+                        <i class="fa-solid fa-circle-exclamation text-base"></i> មានបញ្ហាក្នុងការរក្សាទុកទិន្នន័យ (Validation Errors):
+                    </div>
+                    <ul class="list-disc list-inside pl-4 text-xs space-y-0.5 text-rose-700">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
 
                 <!-- Page Header -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -361,7 +373,11 @@ $navItems = [
                                 ])) : ($rawSpecs ?? '');
 
                                 $images = collect($product->images ?? [])->map(function ($img) {
-                                return $img->image_url ?? (isset($img->image_path) ? asset('storage/' . $img->image_path) : null);
+                                    if (isset($img->image_url)) return $img->image_url;
+                                    if (isset($img->image_path)) {
+                                        return Str::startsWith($img->image_path, ['http', 'storage/']) ? asset($img->image_path) : asset('storage/' . $img->image_path);
+                                    }
+                                    return null;
                                 })->filter()->values();
 
                                 $serials = collect($product->serials ?? []);
@@ -383,7 +399,7 @@ $navItems = [
                                 'min_stock_alert' => $product->min_stock_alert,
                                 'warranty_period_months' => $product->warranty_period_months,
                                 'status' => $product->status,
-                                'thumbnail' => $product->thumbnail ? asset('storage/' . $product->thumbnail) : null,
+                                'thumbnail' => $product->thumbnail ? (Str::startsWith($product->thumbnail, ['http', 'storage/']) ? asset($product->thumbnail) : asset('storage/' . $product->thumbnail)) : null,
                                 'specs' => $specsArray,
                                 'specs_text' => $specsText,
                                 'images' => $images,
@@ -399,7 +415,7 @@ $navItems = [
                                         <div class="flex items-center gap-3">
                                             <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                                                 @if ($product->thumbnail)
-                                                <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                                <img src="{{ Str::startsWith($product->thumbnail, ['http', 'storage/']) ? asset($product->thumbnail) : asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                                                 @else
                                                 <i class="fa-solid fa-image text-slate-300 text-lg"></i>
                                                 @endif
@@ -568,10 +584,20 @@ $navItems = [
                             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
                     </div>
 
-                    <div class="md:col-span-2">
+                    <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5">Warranty Period (Months)</label>
                         <input type="number" min="0" name="warranty_period_months" placeholder="e.g. 12"
-                            class="w-full md:w-1/2 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Status <span class="text-rose-500">*</span></label>
+                        <select name="status" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                            <option value="In Stock" selected>In Stock</option>
+                            <option value="Low Stock">Low Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                            <option value="Discontinued">Discontinued</option>
+                        </select>
                     </div>
 
                     <div class="md:col-span-2 pt-2">
@@ -729,6 +755,16 @@ $navItems = [
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5">Warranty Period (Months)</label>
                         <input type="number" min="0" name="warranty_period_months" id="edit_warranty_period_months"
                             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Status <span class="text-rose-500">*</span></label>
+                        <select name="status" id="edit_status" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                            <option value="In Stock">In Stock</option>
+                            <option value="Low Stock">Low Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                            <option value="Discontinued">Discontinued</option>
+                        </select>
                     </div>
 
                     <div class="md:col-span-2 pt-2">
@@ -986,6 +1022,7 @@ $navItems = [
             document.getElementById('edit_stock_quantity').value = product.stock_quantity ?? '';
             document.getElementById('edit_min_stock_alert').value = product.min_stock_alert ?? '';
             document.getElementById('edit_warranty_period_months').value = product.warranty_period_months ?? '';
+            document.getElementById('edit_status').value = product.status ?? 'In Stock';
 
             const specs = product.specs || {};
             document.getElementById('edit_spec_cpu').value = specs.cpu ?? '';

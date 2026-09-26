@@ -22,12 +22,12 @@ class StoreProductRequest extends FormRequest
             'stock_quantity'         => 'required|integer|min:0',
             'min_stock_alert'        => 'nullable|integer|min:0',
             'warranty_period_months' => 'nullable|integer|min:0',
-            'specifications'         => 'nullable|string',
+            'specifications'         => 'nullable',
             'description'            => 'nullable|string',
             'thumbnail'              => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'gallery_images.*'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'serial_numbers'         => 'nullable|string', // បញ្ចូលមួយជួរមួយលេខ
-            'status'                 => 'required|in:In Stock,Low Stock,Out of Stock,Discontinued',
+            'status'                 => 'nullable|in:In Stock,Low Stock,Out of Stock,Discontinued',
         ];
     }
 }

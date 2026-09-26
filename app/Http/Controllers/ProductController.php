@@ -87,6 +87,16 @@ class ProductController extends Controller
         try {
             $data = $request->validated();
 
+            // Encode specifications as JSON if submitted as an array
+            if (isset($data['specifications']) && is_array($data['specifications'])) {
+                $data['specifications'] = json_encode($data['specifications']);
+            }
+
+            // Default status based on stock quantity if not provided
+            if (empty($data['status'])) {
+                $data['status'] = ($data['stock_quantity'] ?? 0) > 0 ? 'In Stock' : 'Out of Stock';
+            }
+
             // Handle Thumbnail Upload
             if ($request->hasFile('thumbnail')) {
                 $data['thumbnail'] = $request->file('thumbnail')->store('products/thumbnails', 'public');
@@ -153,34 +163,52 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $data = $request->validated();
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
 
-        // Handle Thumbnail Update
-        if ($request->hasFile('thumbnail')) {
-            if ($product->thumbnail && Storage::disk('public')->exists($product->thumbnail)) {
-                Storage::disk('public')->delete($product->thumbnail);
+            // Encode specifications as JSON if submitted as an array
+            if (isset($data['specifications']) && is_array($data['specifications'])) {
+                $data['specifications'] = json_encode($data['specifications']);
             }
-            $data['thumbnail'] = $request->file('thumbnail')->store('products/thumbnails', 'public');
-        }
 
-        $product->update($data);
-
-        // Handle Additional Gallery Images Upload
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $image) {
-                $path = $image->store('products/gallery', 'public');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $path,
-                ]);
+            // Default status based on stock quantity if not provided
+            if (empty($data['status'])) {
+                $data['status'] = ($data['stock_quantity'] ?? 0) > 0 ? 'In Stock' : 'Out of Stock';
             }
-        }
 
-        if ($request->wantsJson() || $request->is('api/*')) {
-            return response()->json(['status' => true, 'message' => 'Product updated successfully', 'data' => $product], 200);
-        }
+            // Handle Thumbnail Update
+            if ($request->hasFile('thumbnail')) {
+                if ($product->thumbnail && Storage::disk('public')->exists($product->thumbnail)) {
+                    Storage::disk('public')->delete($product->thumbnail);
+                }
+                $data['thumbnail'] = $request->file('thumbnail')->store('products/thumbnails', 'public');
+            }
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully');
+            $product->update($data);
+
+            // Handle Additional Gallery Images Upload
+            if ($request->hasFile('gallery_images')) {
+                foreach ($request->file('gallery_images') as $image) {
+                    $path = $image->store('products/gallery', 'public');
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => $path,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['status' => true, 'message' => 'Product updated successfully', 'data' => $product], 200);
+            }
+
+            return redirect()->route('products.index')->with('success', 'Product updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error updating product: ' . $e->getMessage())->withInput();
+        }
     }
 
     /**
