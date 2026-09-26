@@ -68,8 +68,3 @@ Route::apiResource('customers', CustomerController::class)->names('api.customers
 // 6. Product Management API // បន្ថែមពេលធ្វើ product management ដើម្បីយកទៅតេស្ដលើ Postman
 Route::apiResource('products', ProductController::class)->names('api.products');
 
-use App\Http\Controllers\WarehouseController;
-
-// 7. Warehouse Management API
-Route::apiResource('warehouses', WarehouseController::class)->names('api.warehouses');
-

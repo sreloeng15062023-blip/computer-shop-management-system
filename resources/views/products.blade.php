@@ -658,15 +658,6 @@ $navItems = [
                         <textarea name="serial_numbers" rows="4" placeholder="SN-0001&#10;SN-0002&#10;SN-0003"
                             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition font-mono"></textarea>
                     </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Assign Serial Numbers to Warehouse</label>
-                        <select name="warehouse_id" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
-                            @foreach ($warehouses as $wh)
-                            <option value="{{ $wh->id }}">{{ $wh->name }} ({{ $wh->code }})</option>
-                            @endforeach
-                        </select>
-                    </div>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 sticky bottom-0 bg-white">
@@ -937,14 +928,14 @@ $navItems = [
                     </button>
                     <button type="button" onclick="switchViewTab('serials')" id="tab_btn_serials"
                         class="view-tab-btn px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700">
-                        Serial Numbers & Warehouses <span id="serial_count_badge" class="ml-1 text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">0</span>
+                        Serial Numbers <span id="serial_count_badge" class="ml-1 text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">0</span>
                     </button>
                 </div>
             </div>
 
             <div class="p-6 pt-4">
                 <div id="tab_content_overview" class="text-sm text-slate-500">
-                    Use the tabs above to view individual serial numbers, their current warranty status, and assigned warehouse depot.
+                    Use the tabs above to view individual serial numbers and their current warranty status.
                 </div>
                 <div id="tab_content_serials" class="hidden">
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
@@ -953,7 +944,6 @@ $navItems = [
                                 <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
                                     <th class="px-4 py-2.5">#</th>
                                     <th class="px-4 py-2.5">Serial Number</th>
-                                    <th class="px-4 py-2.5">Warehouse Location</th>
                                     <th class="px-4 py-2.5">Status</th>
                                 </tr>
                             </thead>
@@ -1174,12 +1164,6 @@ $navItems = [
                 <tr>
                     <td class="px-4 py-2.5 text-slate-500">${i + 1}</td>
                     <td class="px-4 py-2.5 font-mono text-slate-700 font-semibold">${s.serial_number}</td>
-                    <td class="px-4 py-2.5 text-xs text-slate-600 font-medium">
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700">
-                            <i class="fa-solid fa-warehouse text-slate-400 text-[10px]"></i>
-                            ${s.warehouse_name || 'Main Warehouse'}
-                        </span>
-                    </td>
                     <td class="px-4 py-2.5">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${serialStatusStyles[s.status] || 'bg-slate-100 text-slate-600'}">
                             ${s.status}
@@ -1188,7 +1172,7 @@ $navItems = [
                 </tr>
             `).join('');
             } else {
-                serialsTable.innerHTML = '<tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">No serial numbers recorded for this product.</td></tr>';
+                serialsTable.innerHTML = '<tr><td colspan="3" class="px-4 py-6 text-center text-slate-400">No serial numbers recorded for this product.</td></tr>';
             }
 
             switchViewTab('overview');

@@ -8,7 +8,6 @@ use App\Models\Brand;
 use App\Models\Supplier;
 use App\Models\ProductSerial;
 use App\Models\ProductImage;
-use App\Models\Warehouse;
 use App\Models\Barcode;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -23,7 +22,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'brand', 'supplier', 'serials.warehouse', 'images', 'barcodes']);
+        $query = Product::with(['category', 'brand', 'supplier', 'serials', 'images', 'barcodes']);
 
         // Search តាម Name, SKU, ឬ Barcode
         if ($request->filled('search')) {
@@ -62,7 +61,6 @@ class ProductController extends Controller
         $categories = Category::where('status', 'Active')->get();
         $brands     = Brand::where('status', 'Active')->get();
         $suppliers  = Supplier::where('status', 'Active')->get();
-        $warehouses = Warehouse::where('status', 'Active')->get();
 
         // Support JSON សម្រាប់ Postman
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -74,7 +72,6 @@ class ProductController extends Controller
             'categories',
             'brands',
             'suppliers',
-            'warehouses',
             'totalProducts',
             'inStockCount',
             'lowStockCount',
@@ -138,8 +135,7 @@ class ProductController extends Controller
                 }
             }
 
-            // Handle Serial Numbers (មួយជួរ = មួយលេខ Serial & ភ្ជាប់ទៅកាន់ឃ្លាំង)
-            $targetWarehouseId = $request->warehouse_id ?? (Warehouse::first()->id ?? null);
+            // Handle Serial Numbers (មួយជួរ = មួយលេខ Serial)
             if ($request->filled('serial_numbers')) {
                 $serials = array_filter(array_map('trim', explode("\n", $request->serial_numbers)));
                 foreach ($serials as $serial) {
@@ -148,8 +144,7 @@ class ProductController extends Controller
                             'product_id'    => $product->id,
                             'serial_number' => $serial,
                         ], [
-                            'warehouse_id' => $targetWarehouseId,
-                            'status'       => 'In Stock',
+                            'status' => 'In Stock',
                         ]);
                     }
                 }
@@ -158,10 +153,10 @@ class ProductController extends Controller
             DB::commit();
 
             if ($request->wantsJson() || $request->is('api/*')) {
-                return response()->json(['status' => true, 'message' => 'Product created successfully', 'data' => $product->load(['serials.warehouse', 'images', 'barcodes'])], 201);
+                return response()->json(['status' => true, 'message' => 'Product created successfully', 'data' => $product->load(['serials', 'images', 'barcodes'])], 201);
             }
 
-            return redirect()->route('products.index')->with('success', 'Product created successfully with Barcode, Serials, and Warehouse assignment');
+            return redirect()->route('products.index')->with('success', 'Product created successfully with Barcode, Serials, and Images');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error creating product: ' . $e->getMessage())->withInput();

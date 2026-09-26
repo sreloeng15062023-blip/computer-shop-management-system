@@ -6,7 +6,6 @@ use App\Http\Controllers\SupplierController; // បន្ថែមពេលធ�
 use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ្វើ customer management
 use App\Http\Controllers\CategoryController; // បន្ថែមពេលធ្វើ category management
 use App\Http\Controllers\ProductController; // បន្ថែមពេលធ្វើ product management
-use App\Http\Controllers\WarehouseController; // បន្ថែមពេលធ្វើ warehouse management
 use Illuminate\Support\Facades\Route;
 
 
@@ -65,16 +64,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::get('/customer-list', [CustomerController::class, 'index'])->name('customers'); // Alias fallback
 
-    // 6.5. Warehouses (Feature #8: Multi-location & Inventory Depots)
-    Route::resource('warehouses', WarehouseController::class);
-
     // 7. Purchases
     Route::get('/purchases', function () {
         return view('empty');
     })->name('purchases');
 
-    // 8. Inventory (Routes to warehouses by default or inventory)
-    Route::get('/inventory', [WarehouseController::class, 'index'])->name('inventory');
+    // 8. Inventory
+    Route::get('/inventory', function () {
+        return view('empty');
+    })->name('inventory');
 
     // 9. POS Sales
     Route::get('/pos-sales', function () {
