@@ -64,6 +64,10 @@
                         <i class="fa-solid fa-boxes-stacked w-5 text-center"></i> Product Management
                     </a>
 
+                    <a href="{{ route('categories.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('categories.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-layer-group w-5 text-center"></i> Category Management
+                    </a>
+
                     <a href="{{ route('brands.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('brands.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-tags w-5 text-center"></i> Brand Management
                     </a>

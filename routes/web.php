@@ -4,6 +4,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BrandController; // បន្ថែមពេលបង្កើត brand management
 use App\Http\Controllers\SupplierController; // បន្ថែមពេលធ្វើ supplier management
 use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ្វើ customer management
+use App\Http\Controllers\CategoryController; // បន្ថែមពេលធ្វើ category management
 use App\Http\Controllers\ProductController; // បន្ថែមពេលធ្វើ product management
 use Illuminate\Support\Facades\Route;
 
@@ -41,13 +42,7 @@ Route::middleware(['auth'])->group(function () {
     // 2. Products Management
     Route::resource('products', ProductController::class);
     // 3. Categories Management
-    Route::get('/categories', function () {
-        return view('empty');
-    })->name('categories.index');
-
-    Route::get('/categories/create', function () {
-        return view('empty');
-    })->name('categories.create');
+    Route::resource('categories', CategoryController::class);
 
     // 4. Brands Management
     

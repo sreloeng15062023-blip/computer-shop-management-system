@@ -48,6 +48,12 @@ use App\Http\Controllers\BrandController; // បន្ថែមពេលបង�
 // 3. Brand Management API   // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
 Route::apiResource('brands', BrandController::class);// បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
 
+use App\Http\Controllers\CategoryController; // បន្ថែមពេលធ្វើ category management
+
+// Category Management API
+Route::apiResource('categories', CategoryController::class)->names('api.categories');
+
+
 
 
 // 4. Supplier Management API // បន្ថែមពេលធ្វើsupplier management

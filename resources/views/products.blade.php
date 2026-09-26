@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 $navItems = [
 ['label' => 'Dashboard', 'icon' => 'fa-gauge-high', 'route' => 'dashboard'],
 ['label' => 'Product Management', 'icon' => 'fa-boxes-stacked', 'route' => 'products.index'],
+['label' => 'Categories', 'icon' => 'fa-layer-group', 'route' => 'categories.index'],
 ['label' => 'Brands', 'icon' => 'fa-copyright', 'route' => 'brands.index'],
 ['label' => 'Suppliers', 'icon' => 'fa-truck-field', 'route' => 'suppliers.index'],
 ['label' => 'Customers', 'icon' => 'fa-users', 'route' => 'customers.index'],
