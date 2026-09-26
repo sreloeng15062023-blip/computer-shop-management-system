@@ -64,15 +64,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::get('/customer-list', [CustomerController::class, 'index'])->name('customers'); // Alias fallback
 
-    // 7. Purchases
-    Route::get('/purchases', function () {
-        return view('empty');
-    })->name('purchases');
+    // 7. Purchases Management (Phase 3: Features #7 Purchase Management)
+    Route::resource('purchase-orders', App\Http\Controllers\PurchaseOrderController::class);
+    Route::patch('/purchase-orders/{purchase_order}/status', [App\Http\Controllers\PurchaseOrderController::class, 'updateStatus'])->name('purchase-orders.update-status');
+    Route::get('/purchases', [App\Http\Controllers\PurchaseOrderController::class, 'index'])->name('purchases'); // Sidebar menu link
 
-    // 8. Inventory
-    Route::get('/inventory', function () {
-        return view('empty');
-    })->name('inventory');
+    // 8. Inventory Management & Stock Adjustment (Phase 3: Features #8 Inventory Management)
+    Route::get('/inventory-transactions', [App\Http\Controllers\InventoryTransactionController::class, 'index'])->name('inventory-transactions.index');
+    Route::get('/inventory', [App\Http\Controllers\InventoryTransactionController::class, 'index'])->name('inventory'); // Sidebar menu link
+    Route::post('/inventory/adjust', [App\Http\Controllers\InventoryTransactionController::class, 'adjustStock'])->name('inventory.adjust');
 
     // 9. POS Sales
     Route::get('/pos-sales', function () {

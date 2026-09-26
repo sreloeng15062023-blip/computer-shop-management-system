@@ -43,4 +43,6 @@ class Product extends Model
     public function images() { return $this->hasMany(ProductImage::class); }
     public function barcodes() { return $this->hasMany(Barcode::class); }
     public function primaryBarcode() { return $this->hasOne(Barcode::class)->where('is_primary', true); }
+    public function purchaseOrderDetails() { return $this->hasMany(PurchaseOrderDetail::class); }
+    public function inventoryTransactions() { return $this->hasMany(InventoryTransaction::class); }
 }

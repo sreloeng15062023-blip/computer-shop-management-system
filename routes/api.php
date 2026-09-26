@@ -68,3 +68,14 @@ Route::apiResource('customers', CustomerController::class)->names('api.customers
 // 6. Product Management API // បន្ថែមពេលធ្វើ product management ដើម្បីយកទៅតេស្ដលើ Postman
 Route::apiResource('products', ProductController::class)->names('api.products');
 
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\InventoryTransactionController;
+
+// 7. Purchase Management API (Phase 3: Feature #7)
+Route::apiResource('purchase-orders', PurchaseOrderController::class)->names('api.purchase-orders');
+Route::patch('purchase-orders/{purchase_order}/status', [PurchaseOrderController::class, 'updateStatus'])->name('api.purchase-orders.update-status');
+
+// 8. Inventory Management & Stock Adjustment API (Phase 3: Feature #8)
+Route::get('inventory-transactions', [InventoryTransactionController::class, 'index'])->name('api.inventory-transactions.index');
+Route::post('inventory/adjust', [InventoryTransactionController::class, 'adjustStock'])->name('api.inventory.adjust');
+

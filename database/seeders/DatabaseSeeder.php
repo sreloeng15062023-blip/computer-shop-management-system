@@ -39,5 +39,8 @@ class DatabaseSeeder extends Seeder
         // 6. Seed Categories & Products
         $this->call(CategorySeeder::class);
         $this->call(ProductSeeder::class);
+
+        // 7. Seed Purchase Orders & Inventory Transactions (Phase 3)
+        $this->call(PurchaseOrderSeeder::class);
     }
 }
