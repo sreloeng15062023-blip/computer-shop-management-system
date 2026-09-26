@@ -101,10 +101,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices/{id}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/invoices/{id}/print', [App\Http\Controllers\InvoiceController::class, 'print'])->name('invoices.print');
 
-    // 13. Employees
-    Route::get('/employees', function () {
-        return view('empty');
-    })->name('employees');
+    // 13. Employees (Phase 6: Feature #13 Employee Management & HRM)
+    Route::get('/employees', [App\Http\Controllers\EmployeeController::class, 'index'])->name('employees');
+    Route::post('/employees', [App\Http\Controllers\EmployeeController::class, 'store'])->name('employees.store');
+    Route::get('/employees/{id}', [App\Http\Controllers\EmployeeController::class, 'show'])->name('employees.show');
+    Route::put('/employees/{id}', [App\Http\Controllers\EmployeeController::class, 'update'])->name('employees.update');
+    Route::delete('/employees/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::post('/employees/{id}/attendance', [App\Http\Controllers\EmployeeController::class, 'recordAttendance'])->name('employees.attendance');
 
     // 14. Reports
     Route::get('/reports', function () {
