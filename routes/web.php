@@ -74,13 +74,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventory', [App\Http\Controllers\InventoryTransactionController::class, 'index'])->name('inventory'); // Sidebar menu link
     Route::post('/inventory/adjust', [App\Http\Controllers\InventoryTransactionController::class, 'adjustStock'])->name('inventory.adjust');
 
-    // 9. POS Sales
-    Route::get('/pos-sales', function () {
-        return view('empty');
-    })->name('pos.sales');
-    Route::get('/sales', function () {
-        return view('empty');
-    })->name('sales.index');
+    // 9. POS Sales (Phase 4: Sales Management POS)
+    Route::get('/pos-sales', [App\Http\Controllers\PosController::class, 'index'])->name('pos.sales');
+    Route::get('/sales', [App\Http\Controllers\PosController::class, 'index'])->name('sales.index');
+    Route::post('/pos/checkout', [App\Http\Controllers\PosController::class, 'checkout'])->name('pos.checkout');
+    Route::get('/pos/receipt/{id}', [App\Http\Controllers\PosController::class, 'receipt'])->name('pos.receipt');
 
     // 10. Repair Service
     Route::get('/repair-service', function () {
@@ -98,10 +96,10 @@ Route::middleware(['auth'])->group(function () {
         return view('empty');
     })->name('warranties.index');
 
-    // 12. Invoices & Payments
-    Route::get('/invoices', function () {
-        return view('empty');
-    })->name('invoices');
+    // 12. Invoices & Payments (Phase 4: Payment & Invoice Management)
+    Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices');
+    Route::get('/invoices/{id}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/{id}/print', [App\Http\Controllers\InvoiceController::class, 'print'])->name('invoices.print');
 
     // 13. Employees
     Route::get('/employees', function () {

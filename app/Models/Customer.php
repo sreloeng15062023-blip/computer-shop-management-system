@@ -26,6 +26,20 @@ class Customer extends Model
         'points'=>'integer',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
-    
     ];
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
