@@ -166,32 +166,34 @@ $navItems = [
         <div class="flex-1 flex flex-col min-w-0">
 
             <!-- ============ TOPBAR ============ -->
-            <header class="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center gap-4">
-                <button onclick="toggleMobileSidebar()" class="lg:hidden text-slate-500 hover:text-slate-800">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-
-                <div class="hidden sm:flex items-center flex-1 max-w-md relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-sm"></i>
-                    <input type="text" placeholder="Quick search products, SKU, barcode..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 border border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
-                </div>
-
-                <div class="flex items-center gap-3 ml-auto">
-                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition">
-                        <i class="fa-regular fa-bell text-lg"></i>
-                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+            <header class="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4 shadow-xs">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleMobileSidebar()" class="lg:hidden text-slate-500 hover:text-slate-800 p-2 rounded-lg hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
                     </button>
 
-                    <div class="w-px h-8 bg-slate-200 hidden sm:block"></div>
+                    <div class="hidden sm:flex items-center w-72 sm:w-80 relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" placeholder="Quick search products, SKU, barcode..."
+                            class="w-full pl-10 pr-4 py-2 bg-slate-100/80 border border-transparent rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition">
+                    </div>
+                </div>
 
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                <div class="flex items-center gap-4">
+                    <button class="relative p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-xl transition">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white"></span>
+                    </button>
+
+                    <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
+                        <div class="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         </div>
                         <div class="hidden sm:block leading-tight">
                             <p class="text-sm font-semibold text-slate-800">{{ Auth::user()->name ?? 'Admin User' }}</p>
-                            <p class="text-xs text-slate-500">{{ Auth::user()->role ?? 'Administrator' }}</p>
+                            <p class="text-xs text-slate-400 font-medium mt-0.5">
+                                {{ Auth::user()->role->role_name ?? (is_string(Auth::user()->role) ? Auth::user()->role : 'Technician') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -331,11 +333,11 @@ $navItems = [
                                     <th class="px-4 py-3 min-w-[220px]">Product</th>
                                     <th class="px-4 py-3">Category</th>
                                     <th class="px-4 py-3">Brand</th>
-                                    <th class="px-4 py-3">Cost Price</th>
-                                    <th class="px-4 py-3">Selling Price</th>
-                                    <th class="px-4 py-3">Stock</th>
-                                    <th class="px-4 py-3">Warranty</th>
-                                    <th class="px-4 py-3 text-center">Actions</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Cost Price</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Selling Price</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Stock</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Warranty</th>
+                                    <th class="px-4 py-3 text-center whitespace-nowrap">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
@@ -410,15 +412,15 @@ $navItems = [
                                     </td>
                                     <td class="px-4 py-3 text-slate-600">{{ $product->category->name ?? '—' }}</td>
                                     <td class="px-4 py-3 text-slate-600">{{ $product->brand->brand_name ?? '—' }}</td>
-                                    <td class="px-4 py-3 text-slate-600">${{ number_format($product->cost_price, 2) }}</td>
-                                    <td class="px-4 py-3 font-semibold text-slate-800">${{ number_format($product->selling_price, 2) }}</td>
-                                    <td class="px-4 py-3">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusClasses }}">
+                                    <td class="px-4 py-3 whitespace-nowrap text-slate-600">${{ number_format($product->cost_price, 2) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap font-semibold text-slate-800">${{ number_format($product->selling_price, 2) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap {{ $statusClasses }}">
                                             <i class="fa-solid fa-circle text-[6px]"></i>
                                             {{ $product->status }} ({{ $product->stock_quantity }})
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 text-slate-600">{{ $product->warranty_period_months }} mo</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-slate-600">{{ $product->warranty_period_months }} mo</td>
                                     <td class="px-4 py-3">
                                         <div class="flex items-center justify-center gap-2">
                                             <button type="button" title="View Details"
@@ -1028,7 +1030,7 @@ $navItems = [
                 (product.warranty_period_months ?? 0) + ' Month(s)';
 
             const badge = document.getElementById('view_status_badge');
-            badge.className = 'inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full text-xs font-semibold ' +
+            badge.className = 'inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ' +
                 (statusStyles[product.status] || 'bg-slate-100 text-slate-600');
             document.getElementById('view_status_text').textContent =
                 (product.status ?? '—') + ' (' + (product.stock_quantity ?? 0) + ' units)';
