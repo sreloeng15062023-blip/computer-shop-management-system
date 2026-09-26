@@ -80,21 +80,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pos/checkout', [App\Http\Controllers\PosController::class, 'checkout'])->name('pos.checkout');
     Route::get('/pos/receipt/{id}', [App\Http\Controllers\PosController::class, 'receipt'])->name('pos.receipt');
 
-    // 10. Repair Service
-    Route::get('/repair-service', function () {
-        return view('empty');
-    })->name('repair.service');
-    Route::get('/repairs', function () {
-        return view('empty');
-    })->name('repairs.index');
+    // 10. Repair Service (Phase 5: Feature #10 Repair Service Management)
+    Route::get('/repair-service', [App\Http\Controllers\RepairServiceController::class, 'index'])->name('repair.service');
+    Route::get('/repairs', [App\Http\Controllers\RepairServiceController::class, 'index'])->name('repairs.index');
+    Route::post('/repairs', [App\Http\Controllers\RepairServiceController::class, 'store'])->name('repairs.store');
+    Route::get('/repairs/{id}', [App\Http\Controllers\RepairServiceController::class, 'show'])->name('repairs.show');
+    Route::patch('/repairs/{id}/status', [App\Http\Controllers\RepairServiceController::class, 'updateStatus'])->name('repairs.update-status');
+    Route::post('/repairs/{id}/parts', [App\Http\Controllers\RepairServiceController::class, 'addPart'])->name('repairs.add-part');
+    Route::get('/repairs/{id}/ticket', [App\Http\Controllers\RepairServiceController::class, 'ticket'])->name('repairs.ticket');
 
-    // 11. Warranty
-    Route::get('/warranty', function () {
-        return view('empty');
-    })->name('warranty');
-    Route::get('/warranties', function () {
-        return view('empty');
-    })->name('warranties.index');
+    // 11. Warranty (Phase 5: Feature #11 Warranty Management)
+    Route::get('/warranty', [App\Http\Controllers\WarrantyController::class, 'index'])->name('warranty');
+    Route::get('/warranties', [App\Http\Controllers\WarrantyController::class, 'index'])->name('warranties.index');
+    Route::post('/warranties', [App\Http\Controllers\WarrantyController::class, 'store'])->name('warranties.store');
+    Route::get('/warranties/lookup', [App\Http\Controllers\WarrantyController::class, 'lookup'])->name('warranties.lookup');
+    Route::post('/warranties/claim', [App\Http\Controllers\WarrantyController::class, 'storeClaim'])->name('warranties.claim');
 
     // 12. Invoices & Payments (Phase 4: Payment & Invoice Management)
     Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices');
