@@ -53,6 +53,9 @@ $navItems = [
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- JsBarcode CDN for real barcode rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -404,7 +407,7 @@ $navItems = [
                                 'specs' => $specsArray,
                                 'specs_text' => $specsText,
                                 'images' => $images,
-                                'serials' => $serials->map(fn($s) => ['serial_number' => $s->serial_number, 'status' => $s->status])->values(),
+                                'serials' => $serials->map(fn($s) => ['serial_number' => $s->serial_number, 'status' => $s->status, 'warehouse_name' => $s->warehouse->name ?? 'Main Warehouse'])->values(),
                                 ];
                                 @endphp
                                 <tr class="hover:bg-slate-50/70 transition">
@@ -522,9 +525,14 @@ $navItems = [
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Barcode</label>
-                        <input type="text" name="barcode" placeholder="e.g. 8901234567890"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-xs font-semibold text-slate-600">Barcode</label>
+                            <button type="button" onclick="autoGenerateBarcode('add_barcode_input')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto Generate
+                            </button>
+                        </div>
+                        <input type="text" id="add_barcode_input" name="barcode" placeholder="e.g. 8851234567890 (leave empty to auto-generate)"
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition font-mono">
                     </div>
 
                     <div>
@@ -649,6 +657,15 @@ $navItems = [
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5">Serial Numbers <span class="text-slate-400 font-normal">(one per line, optional)</span></label>
                         <textarea name="serial_numbers" rows="4" placeholder="SN-0001&#10;SN-0002&#10;SN-0003"
                             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition font-mono"></textarea>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Assign Serial Numbers to Warehouse</label>
+                        <select name="warehouse_id" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm outline-none transition">
+                            @foreach ($warehouses as $wh)
+                            <option value="{{ $wh->id }}">{{ $wh->name }} ({{ $wh->code }})</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -894,6 +911,20 @@ $navItems = [
                         <p class="text-[11px] text-slate-500 font-semibold uppercase mb-1.5">Full Specifications</p>
                         <div id="view_specs" class="bg-slate-50 rounded-xl p-3 text-sm text-slate-700 space-y-1">—</div>
                     </div>
+
+                    <!-- Barcode Section -->
+                    <div class="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex flex-col items-center sm:items-start">
+                            <span class="text-[11px] text-slate-500 font-bold uppercase tracking-wider">Product Barcode Label (Scan & Print)</span>
+                            <div class="mt-1.5 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center">
+                                <svg id="view_barcode_svg" class="max-w-[240px] h-12"></svg>
+                            </div>
+                        </div>
+                        <button type="button" onclick="printBarcodeLabel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-xs transition shrink-0">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Print Barcode</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -906,14 +937,14 @@ $navItems = [
                     </button>
                     <button type="button" onclick="switchViewTab('serials')" id="tab_btn_serials"
                         class="view-tab-btn px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700">
-                        Serial Numbers <span id="serial_count_badge" class="ml-1 text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">0</span>
+                        Serial Numbers & Warehouses <span id="serial_count_badge" class="ml-1 text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">0</span>
                     </button>
                 </div>
             </div>
 
             <div class="p-6 pt-4">
                 <div id="tab_content_overview" class="text-sm text-slate-500">
-                    Use the tabs above to view individual serial numbers and their current status.
+                    Use the tabs above to view individual serial numbers, their current warranty status, and assigned warehouse depot.
                 </div>
                 <div id="tab_content_serials" class="hidden">
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
@@ -922,6 +953,7 @@ $navItems = [
                                 <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
                                     <th class="px-4 py-2.5">#</th>
                                     <th class="px-4 py-2.5">Serial Number</th>
+                                    <th class="px-4 py-2.5">Warehouse Location</th>
                                     <th class="px-4 py-2.5">Status</th>
                                 </tr>
                             </thead>
@@ -1117,6 +1149,22 @@ $navItems = [
                 placeholder.classList.remove('hidden');
             }
 
+            // Barcode Rendering via JsBarcode
+            const barcodeVal = product.barcode || ('885' + String(product.id || '1').padStart(8, '0') + '1');
+            try {
+                JsBarcode('#view_barcode_svg', barcodeVal, {
+                    format: 'CODE128',
+                    width: 1.8,
+                    height: 48,
+                    displayValue: true,
+                    fontSize: 13,
+                    font: 'Plus Jakarta Sans',
+                    lineColor: '#0f172a'
+                });
+            } catch (e) {
+                console.error('JsBarcode rendering error:', e);
+            }
+
             // Serial numbers
             const serials = product.serials || [];
             document.getElementById('serial_count_badge').textContent = serials.length;
@@ -1125,7 +1173,13 @@ $navItems = [
                 serialsTable.innerHTML = serials.map((s, i) => `
                 <tr>
                     <td class="px-4 py-2.5 text-slate-500">${i + 1}</td>
-                    <td class="px-4 py-2.5 font-mono text-slate-700">${s.serial_number}</td>
+                    <td class="px-4 py-2.5 font-mono text-slate-700 font-semibold">${s.serial_number}</td>
+                    <td class="px-4 py-2.5 text-xs text-slate-600 font-medium">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700">
+                            <i class="fa-solid fa-warehouse text-slate-400 text-[10px]"></i>
+                            ${s.warehouse_name || 'Main Warehouse'}
+                        </span>
+                    </td>
                     <td class="px-4 py-2.5">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${serialStatusStyles[s.status] || 'bg-slate-100 text-slate-600'}">
                             ${s.status}
@@ -1134,11 +1188,51 @@ $navItems = [
                 </tr>
             `).join('');
             } else {
-                serialsTable.innerHTML = '<tr><td colspan="3" class="px-4 py-6 text-center text-slate-400">No serial numbers recorded for this product.</td></tr>';
+                serialsTable.innerHTML = '<tr><td colspan="4" class="px-4 py-6 text-center text-slate-400">No serial numbers recorded for this product.</td></tr>';
             }
 
             switchViewTab('overview');
             openModal('viewProductModal');
+        }
+
+        // ---------- Barcode Helper Functions ----------
+        function autoGenerateBarcode(inputId) {
+            const code = '885' + Math.floor(100000000 + Math.random() * 900000000);
+            const inputEl = document.getElementById(inputId);
+            if (inputEl) inputEl.value = code;
+        }
+
+        function printBarcodeLabel() {
+            const svgEl = document.getElementById('view_barcode_svg');
+            if (!svgEl) return;
+            const svgContent = svgEl.outerHTML;
+            const productName = document.getElementById('view_name').textContent;
+            const sellingPrice = document.getElementById('view_selling_price').textContent;
+            const printWin = window.open('', '', 'width=450,height=350');
+            printWin.document.write(`
+                <html>
+                    <head>
+                        <title>Print Barcode Label - TECHZONE</title>
+                        <style>
+                            body { font-family: sans-serif; text-align: center; padding: 25px; }
+                            .label-card { border: 1.5px dashed #0f172a; padding: 18px; border-radius: 12px; display: inline-block; }
+                            h3 { margin: 0 0 8px 0; font-size: 14px; font-weight: 700; color: #0f172a; }
+                            .price { font-size: 16px; font-weight: 800; margin-top: 8px; color: #2563eb; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="label-card">
+                            <h3>${productName}</h3>
+                            ${svgContent}
+                            <div class="price">${sellingPrice}</div>
+                        </div>
+                        <script>
+                            window.onload = function() { window.print(); window.close(); }
+                        <\/script>
+                    </body>
+                </html>
+            `);
+            printWin.document.close();
         }
 
         function switchViewTab(tab) {

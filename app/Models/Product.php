@@ -41,4 +41,6 @@ class Product extends Model
     public function supplier() { return $this->belongsTo(Supplier::class); }
     public function serials() { return $this->hasMany(ProductSerial::class); }
     public function images() { return $this->hasMany(ProductImage::class); }
+    public function barcodes() { return $this->hasMany(Barcode::class); }
+    public function primaryBarcode() { return $this->hasOne(Barcode::class)->where('is_primary', true); }
 }

@@ -72,6 +72,10 @@
                         <i class="fa-solid fa-tags w-5 text-center"></i> Brand Management
                     </a>
 
+                    <a href="{{ route('warehouses.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('warehouses.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                        <i class="fa-solid fa-warehouse w-5 text-center"></i> Warehouse Management
+                    </a>
+
                     <a href="{{ route('suppliers.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('suppliers.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                         <i class="fa-solid fa-truck-fast w-5 text-center"></i> Supplier Management
                     </a>

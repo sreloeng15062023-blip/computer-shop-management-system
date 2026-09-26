@@ -8,6 +8,8 @@ use App\Models\Brand;
 use App\Models\Supplier;
 use App\Models\ProductSerial;
 use App\Models\ProductImage;
+use App\Models\Warehouse;
+use App\Models\Barcode;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'brand', 'supplier', 'serials', 'images']);
+        $query = Product::with(['category', 'brand', 'supplier', 'serials.warehouse', 'images', 'barcodes']);
 
         // Search តាម Name, SKU, ឬ Barcode
         if ($request->filled('search')) {
@@ -60,6 +62,7 @@ class ProductController extends Controller
         $categories = Category::where('status', 'Active')->get();
         $brands     = Brand::where('status', 'Active')->get();
         $suppliers  = Supplier::where('status', 'Active')->get();
+        $warehouses = Warehouse::where('status', 'Active')->get();
 
         // Support JSON សម្រាប់ Postman
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -71,6 +74,7 @@ class ProductController extends Controller
             'categories',
             'brands',
             'suppliers',
+            'warehouses',
             'totalProducts',
             'inStockCount',
             'lowStockCount',
@@ -105,6 +109,24 @@ class ProductController extends Controller
             // បង្កើត Product Record
             $product = Product::create($data);
 
+            // Logic បង្កើត Barcode ដោយស្វ័យប្រវត្តិ បើមិនទាន់មានវាយបញ្ចូល
+            $barcodeNumber = $product->barcode;
+            if (empty($barcodeNumber)) {
+                $barcodeNumber = '885' . str_pad($product->id, 8, '0', STR_PAD_LEFT) . rand(0, 9);
+                $product->update(['barcode' => $barcodeNumber]);
+            }
+
+            // កត់ត្រាចូលតារាង barcodes
+            Barcode::updateOrCreate(
+                ['barcode_number' => $barcodeNumber],
+                [
+                    'product_id'   => $product->id,
+                    'barcode_type' => 'CODE128',
+                    'is_primary'   => true,
+                    'print_count'  => 1,
+                ]
+            );
+
             // Handle Gallery Images Upload (រូបភាពច្រើនសន្លឹក)
             if ($request->hasFile('gallery_images')) {
                 foreach ($request->file('gallery_images') as $image) {
@@ -116,7 +138,8 @@ class ProductController extends Controller
                 }
             }
 
-            // Handle Serial Numbers (មួយជួរ = មួយលេខ Serial)
+            // Handle Serial Numbers (មួយជួរ = មួយលេខ Serial & ភ្ជាប់ទៅកាន់ឃ្លាំង)
+            $targetWarehouseId = $request->warehouse_id ?? (Warehouse::first()->id ?? null);
             if ($request->filled('serial_numbers')) {
                 $serials = array_filter(array_map('trim', explode("\n", $request->serial_numbers)));
                 foreach ($serials as $serial) {
@@ -125,7 +148,8 @@ class ProductController extends Controller
                             'product_id'    => $product->id,
                             'serial_number' => $serial,
                         ], [
-                            'status' => 'In Stock',
+                            'warehouse_id' => $targetWarehouseId,
+                            'status'       => 'In Stock',
                         ]);
                     }
                 }
@@ -134,10 +158,10 @@ class ProductController extends Controller
             DB::commit();
 
             if ($request->wantsJson() || $request->is('api/*')) {
-                return response()->json(['status' => true, 'message' => 'Product created successfully', 'data' => $product->load(['serials', 'images'])], 201);
+                return response()->json(['status' => true, 'message' => 'Product created successfully', 'data' => $product->load(['serials.warehouse', 'images', 'barcodes'])], 201);
             }
 
-            return redirect()->route('products.index')->with('success', 'Product created successfully with Serials and Images');
+            return redirect()->route('products.index')->with('success', 'Product created successfully with Barcode, Serials, and Warehouse assignment');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error creating product: ' . $e->getMessage())->withInput();
@@ -186,6 +210,18 @@ class ProductController extends Controller
             }
 
             $product->update($data);
+
+            // Sync barcode to barcodes table
+            if (!empty($product->barcode)) {
+                Barcode::updateOrCreate(
+                    ['barcode_number' => $product->barcode],
+                    [
+                        'product_id'   => $product->id,
+                        'barcode_type' => 'CODE128',
+                        'is_primary'   => true,
+                    ]
+                );
+            }
 
             // Handle Additional Gallery Images Upload
             if ($request->hasFile('gallery_images')) {
