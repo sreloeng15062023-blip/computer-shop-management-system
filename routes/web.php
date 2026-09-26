@@ -78,16 +78,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pos-sales', function () {
         return view('empty');
     })->name('pos.sales');
+    Route::get('/sales', function () {
+        return view('empty');
+    })->name('sales.index');
 
     // 10. Repair Service
     Route::get('/repair-service', function () {
         return view('empty');
     })->name('repair.service');
+    Route::get('/repairs', function () {
+        return view('empty');
+    })->name('repairs.index');
 
     // 11. Warranty
     Route::get('/warranty', function () {
         return view('empty');
     })->name('warranty');
+    Route::get('/warranties', function () {
+        return view('empty');
+    })->name('warranties.index');
 
     // 12. Invoices & Payments
     Route::get('/invoices', function () {
@@ -103,6 +112,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports', function () {
         return view('empty');
     })->name('reports');
+    Route::get('/reports-index', function () {
+        return view('empty');
+    })->name('reports.index');
 
     // 15. Notifications
     Route::get('/notifications', function () {
@@ -113,6 +125,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings', function () {
         return view('empty');
     })->name('settings');
+    Route::get('/settings-index', function () {
+        return view('empty');
+    })->name('settings.index');
 
     // Role Management Resource
     Route::resource('role', RoleController::class);

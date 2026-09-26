@@ -45,4 +45,20 @@ class InventoryTransaction extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * ភ្ជាប់ទៅ Purchase Order (ប្រសិនបើ reference_type == 'PurchaseOrder')
+     */
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'reference_id');
+    }
+
+    /**
+     * Accessor សម្រាប់ Frontend compatibility (quantity_change)
+     */
+    public function getQuantityChangeAttribute()
+    {
+        return $this->quantity;
+    }
 }
