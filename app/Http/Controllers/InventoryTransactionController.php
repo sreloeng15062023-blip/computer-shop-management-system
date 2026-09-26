@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryTransaction;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Supplier;
 use App\Http\Requests\StoreStockAdjustmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,83 +19,119 @@ class InventoryTransactionController extends Controller
      * 1. INDEX: បង្ហាញបញ្ជីប្រវត្តិ និងចរន្តស្តុកទាំងអស់ (Inventory Logs & History)
      * =========================================================================
      * Frontend ហៅមកកាន់: GET /inventory-transactions ឬ GET /api/inventory-transactions
-     * Frontend Query Parameters:
-     *   - ?search=Laptop (ស្វែងរកតាមឈ្មោះទំនិញ, SKU, ឬមូលហេតុ Reason)
-     *   - ?transaction_type=Stock In|Stock Out|Adjustment|Sale|Return
-     *   - ?product_id=5 (ចម្រាញ់តាមមុខទំនិញជាក់លាក់)
-     *   - ?date_from=2026-09-01&date_to=2026-09-30 (ចម្រាញ់តាមកាលបរិច្ឆេទ)
      */
     public function index(Request $request)
     {
-        $query = InventoryTransaction::with(['product.category', 'product.brand', 'user']);
+        // 1. Query សម្រាប់ Product Inventory Table (Main Table ក្នុងរូប)
+        $prodQuery = Product::with(['category', 'brand', 'images']);
 
-        // Search តាមឈ្មោះទំនិញ, SKU, ឬមូលហេតុ (Reason)
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('reason', 'like', "%{$search}%")
-                  ->orWhereHas('product', function ($pq) use ($search) {
-                      $pq->where('name', 'like', "%{$search}%")
-                         ->orWhere('sku', 'like', "%{$search}%");
+            $prodQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%")
+                  ->orWhere('barcode', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category_id')) {
+            $prodQuery->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('brand_id')) {
+            $prodQuery->where('brand_id', $request->brand_id);
+        }
+
+        if ($request->filled('status')) {
+            $prodQuery->where('status', $request->status);
+        }
+
+        $productItems = $prodQuery->latest('id')->paginate(10)->withQueryString();
+
+        // 2. Query សម្រាប់ Inventory History (Transactions Log Tab)
+        $txQuery = InventoryTransaction::with(['product.category', 'product.brand', 'user']);
+
+        if ($request->filled('tx_search')) {
+            $txSearch = $request->tx_search;
+            $txQuery->where(function ($q) use ($txSearch) {
+                $q->where('reason', 'like', "%{$txSearch}%")
+                  ->orWhereHas('product', function ($pq) use ($txSearch) {
+                      $pq->where('name', 'like', "%{$txSearch}%")
+                         ->orWhere('sku', 'like', "%{$txSearch}%");
                   });
             });
         }
 
-        // Filter តាម ប្រភេទប្រតិបត្តិការ (Stock In, Stock Out, Adjustment, Sale, Return)
         if ($request->filled('transaction_type')) {
-            $query->where('transaction_type', $request->transaction_type);
+            $txQuery->where('transaction_type', $request->transaction_type);
         }
 
-        // Filter តាម មុខទំនិញ (Product ID)
-        if ($request->filled('product_id')) {
-            $query->where('product_id', $request->product_id);
-        }
-
-        // Filter តាម កាលបរិច្ឆេទ (Date Range)
         if ($request->filled('date_from')) {
-            $query->whereDate('created_at', '>=', $request->date_from);
+            $txQuery->whereDate('created_at', '>=', $request->date_from);
         }
         if ($request->filled('date_to')) {
-            $query->whereDate('created_at', '<=', $request->date_to);
+            $txQuery->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Pagination: 15 កំណត់ត្រាក្នុងមួយទំព័រ តម្រៀបពីថ្មីបំផុតទៅចាស់បំផុត
-        $transactions = $query->latest('id')->paginate(15)->withQueryString();
+        $transactions = $txQuery->latest('id')->paginate(10, ['*'], 'tx_page')->withQueryString();
 
-        // ស្ថិតិចរន្តស្តុកសរុប (Summary Stats Cards សម្រាប់ Frontend)
-        $totalTransactions = InventoryTransaction::count();
-        $totalStockIn      = InventoryTransaction::where('transaction_type', 'Stock In')->sum('quantity');
-        $totalStockOut     = InventoryTransaction::where('transaction_type', 'Stock Out')->sum('quantity');
-        $totalAdjustments  = InventoryTransaction::where('transaction_type', 'Adjustment')->count();
+        // 3. គណនាស្ថិតិ 5 Stat Cards ដូចរូបភាពបេះបិទ
+        $totalProducts       = Product::count();
+        $activeCount         = Product::where('status', '!=', 'Discontinued')->count();
+        $inactiveCount       = Product::where('status', 'Discontinued')->count();
+        $totalStockQuantity  = (int)Product::sum('stock_quantity');
+        $lowStockCount       = Product::where('status', 'Low Stock')->count();
+        $outOfStockCount     = Product::where('status', 'Out of Stock')->count();
+        $availableCount      = Product::where('status', 'In Stock')->count();
+        $totalStockValue     = Product::sum(DB::raw('stock_quantity * cost_price'));
 
-        // បញ្ជីទំនិញសម្រាប់ Modal កែសម្រួលស្តុក (Stock Adjustment Modal Dropdown)
-        $products = Product::where('status', '!=', 'Discontinued')
-                           ->select('id', 'name', 'sku', 'stock_quantity', 'min_stock_alert')
-                           ->get();
+        // Dropdown Lists សម្រាប់ Filters & Modals
+        $categories = Category::where('status', 'Active')->select('id', 'name')->get();
+        $brands     = Brand::where('status', 'Active')->select('id', 'brand_name')->get();
+        $suppliers  = Supplier::where('status', 'Active')->select('id', 'name')->get();
+        $products   = Product::where('status', '!=', 'Discontinued')->select('id', 'name', 'sku', 'stock_quantity', 'cost_price', 'min_stock_alert')->get();
+
+        // Low Stock Alert Products (Widget ក្នុង Inventory History)
+        $lowStockProducts = Product::where('status', 'Low Stock')
+                                   ->orWhere('status', 'Out of Stock')
+                                   ->take(5)
+                                   ->get();
 
         // ប្រសិនបើ Frontend ហៅតាម AJAX / API / Postman
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
                 'success' => true,
                 'data'    => $transactions,
+                'products' => $productItems,
                 'summary' => [
-                    'total_transactions' => $totalTransactions,
-                    'total_stock_in'     => (int)$totalStockIn,
-                    'total_stock_out'    => (int)$totalStockOut,
-                    'total_adjustments'  => $totalAdjustments,
-                ],
-                'products' => $products
+                    'total_products'       => $totalProducts,
+                    'active_products'      => $activeCount,
+                    'inactive_products'    => $inactiveCount,
+                    'total_stock_quantity' => $totalStockQuantity,
+                    'low_stock_items'      => $lowStockCount,
+                    'out_of_stock_items'   => $outOfStockCount,
+                    'total_stock_value'    => round($totalStockValue, 2),
+                ]
             ], 200);
         }
 
         $viewName = view()->exists('inventory') ? 'inventory' : 'inventory-transactions';
         return view($viewName, compact(
+            'productItems',
             'transactions',
             'products',
-            'totalTransactions',
-            'totalStockIn',
-            'totalStockOut',
-            'totalAdjustments'
+            'categories',
+            'brands',
+            'suppliers',
+            'lowStockProducts',
+            'totalProducts',
+            'activeCount',
+            'inactiveCount',
+            'totalStockQuantity',
+            'lowStockCount',
+            'outOfStockCount',
+            'availableCount',
+            'totalStockValue'
         ));
     }
 
