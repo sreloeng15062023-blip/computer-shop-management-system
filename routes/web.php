@@ -107,13 +107,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/employees/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::post('/employees/{id}/attendance', [App\Http\Controllers\EmployeeController::class, 'recordAttendance'])->name('employees.attendance');
 
-    // 14. Reports
-    Route::get('/reports', function () {
-        return view('empty');
-    })->name('reports');
-    Route::get('/reports-index', function () {
-        return view('empty');
-    })->name('reports.index');
+    // 14. Reports (Phase 7: Feature #14 Report Management)
+    Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports');
+    Route::get('/reports/data', [\App\Http\Controllers\ReportController::class, 'getReportData'])->name('reports.data');
+    Route::get('/reports/export', [\App\Http\Controllers\ReportController::class, 'export'])->name('reports.export');
+    Route::get('/reports/print', [\App\Http\Controllers\ReportController::class, 'printReport'])->name('reports.print');
+    Route::get('/reports-index', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 
     // 15. Notifications
     Route::get('/notifications', function () {
