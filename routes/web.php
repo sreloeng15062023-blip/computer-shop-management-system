@@ -34,10 +34,8 @@ Route::get('/auth/{provider}', function ($provider) {
 // =========================================================================
 Route::middleware(['auth'])->group(function () {
 
-    // 1. Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // 1. Dashboard (Phase 7: Feature #2 Dashboard)
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     // 2. Products Management
     Route::resource('products', ProductController::class);
