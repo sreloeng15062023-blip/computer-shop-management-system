@@ -1,0 +1,12 @@
+.main {
+    width: 400px;
+    margin: 0 auto;
+    border: 1px solid silver;
+     border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+input {
+    margin-bottom: 20px;
+}
