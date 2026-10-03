@@ -115,9 +115,30 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports-index', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 
     // 15. Notifications
-    Route::get('/notifications', function () {
-        return view('empty');
-    })->name('notifications');
+       // =========================================================================
+    // 15. NOTIFICATION SYSTEM ROUTES (គ្រប់គ្រងប្រព័ន្ធដំណឹងទាំងអស់)
+    // =========================================================================
+    Route::controller(\App\Http\Controllers\NotificationController::class)->group(function () {
+        
+        // 1. បើកមើលទំព័រ Notification ធំ (List, Filter, Tabs, Stat Cards)
+        Route::get('/notifications', 'index')->name('notifications');
+
+        // 2. ទាញព័ត៌មានលម្អិតនៃសារមួយមកបង្ហាញក្នុងផ្ទាំង Side Panel ខាងស្តាំតាម AJAX
+        Route::get('/notifications/{id}/details', 'show')->name('notifications.show');
+
+        // 3. ចុចកំណត់សារមួយថាបានអានរួច (Mark as Read)
+        Route::post('/notifications/{id}/read', 'markAsRead')->name('notifications.read');
+
+        // 4. ចុចប៊ូតុងធំ "Mark All as Read" ដើម្បីកំណត់ថាសារទាំងអស់អានរួច
+        Route::post('/notifications/mark-all-read', 'markAllAsRead')->name('notifications.markAllRead');
+
+        // 5. ដំណើរការលើសារដែលបានធីក Checkbox ច្រើន (Bulk Action: Delete ឬ Mark Read)
+        Route::post('/notifications/bulk-action', 'bulkAction')->name('notifications.bulkAction');
+
+        // 6. លុបសារមួយចោលចេញពីប្រព័ន្ធ
+        Route::delete('/notifications/{id}', 'destroy')->name('notifications.destroy');
+    });
+
 
     // 16. Settings
     Route::get('/settings', function () {

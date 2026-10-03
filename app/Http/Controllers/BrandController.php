@@ -152,3 +152,4 @@ class BrandController extends Controller
                          ->with('success', 'Deleted Brand Successfully');
     }
 }
+

@@ -42,5 +42,8 @@ class DatabaseSeeder extends Seeder
 
         // 7. Seed Purchase Orders & Inventory Transactions (Phase 3)
         $this->call(PurchaseOrderSeeder::class);
+         // 8. Seed Notifications (Feature #15)
+        $this->call(NotificationSeeder::class);
+
     }
 }
