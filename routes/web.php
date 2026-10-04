@@ -114,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/print', [\App\Http\Controllers\ReportController::class, 'printReport'])->name('reports.print');
     Route::get('/reports-index', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 
-    // 15. Notifications
+   
        // =========================================================================
     // 15. NOTIFICATION SYSTEM ROUTES (គ្រប់គ្រងប្រព័ន្ធដំណឹងទាំងអស់)
     // =========================================================================
@@ -142,10 +142,10 @@ Route::middleware(['auth'])->group(function () {
 
     // 16. Settings
     Route::get('/settings', function () {
-        return view('empty');
+        return view('settings');
     })->name('settings');
     Route::get('/settings-index', function () {
-        return view('empty');
+        return view('settings');
     })->name('settings.index');
 
     // Role Management Resource
