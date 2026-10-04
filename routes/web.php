@@ -140,13 +140,19 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    // 16. Settings
-    Route::get('/settings', function () {
-        return view('settings');
-    })->name('settings');
-    Route::get('/settings-index', function () {
-        return view('settings');
-    })->name('settings.index');
+
+    // =========================================================================
+    // 16. SETTINGS MANAGEMENT ROUTES (គ្រប់គ្រង Settings តាម Controller)
+    // =========================================================================
+    Route::controller(\App\Http\Controllers\SettingController::class)->group(function () {
+        Route::get('/settings', 'index')->name('settings');
+        Route::get('/settings-index', 'index')->name('settings.index');
+        // Ajax Routes សម្រាប់ Save ទិន្នន័យ
+        Route::post('/settings/general', 'updateGeneral')->name('settings.general');
+        Route::post('/settings/shop', 'updateShop')->name('settings.shop');
+        Route::post('/settings/backup', 'createBackup')->name('settings.backup');
+    });
+
 
     // Role Management Resource
     Route::resource('role', RoleController::class);

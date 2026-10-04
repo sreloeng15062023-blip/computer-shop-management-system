@@ -45,5 +45,7 @@ class DatabaseSeeder extends Seeder
          // 8. Seed Notifications (Feature #15)
         $this->call(NotificationSeeder::class);
 
+        // 9. Seed Settings (Feature #16)
+        $this->call(SettingSeeder::class);
     }
 }
