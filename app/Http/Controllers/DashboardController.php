@@ -33,7 +33,7 @@ class DashboardController extends Controller
         // 1. STAT CARDS (6 Metrics matching Mockup 2)
         // ---------------------------------------------------------------------
         // 1.1 Total Products
-        $totalProducts = Product::count();
+        $totalProducts = Product::count();// ស្មើនឹង SQL: SELECT COUNT(*) FROM products;
         $lastMonthProducts = Product::where('created_at', '<', $startOfMonth)->count();
         $productsGrowth = $this->calculatePercentageGrowth($totalProducts, $lastMonthProducts, 12);
 

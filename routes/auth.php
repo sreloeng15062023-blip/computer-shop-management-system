@@ -120,6 +120,8 @@ Route::middleware('guest')->group(function () {
      */
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
                 ->name('password.reset');
+    Route::get('reset password/{token}', [NewPasswordController::class, 'create']);
+    Route::get('reset%20password/{token}', [NewPasswordController::class, 'create']);
 
     /**
      * Update Password in Database (ធ្វើបច្ចុប្បន្នភាព Password ថ្មីក្នុង Database)

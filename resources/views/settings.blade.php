@@ -51,111 +51,14 @@
 <div class="flex min-h-screen">
 
     {{-- ===================================================================== --}}
-    {{-- 1. LEFT SIDEBAR NAVIGATION (រចនាដូចរូបភាព Mockup ១០០%)              --}}
+    {{-- 1. LEFT SIDEBAR NAVIGATION                                            --}}
     {{-- ===================================================================== --}}
-    <aside class="w-64 bg-[#091024] text-slate-300 flex-shrink-0 hidden lg:flex flex-col justify-between fixed h-screen z-30 shadow-2xl">
-        <div class="flex flex-col h-full overflow-y-auto custom-scrollbar">
-            
-            <!-- Brand Logo Header -->
-            <div class="px-6 py-5 border-b border-slate-800/80 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/30">
-                    <i class="fa-solid fa-cube text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-lg text-white tracking-wider leading-none">TECHZONE</h1>
-                    <p class="text-[10px] text-slate-400 font-medium tracking-tight mt-1">Computer Shop Management System</p>
-                </div>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="p-4 space-y-1 text-sm font-medium">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-house w-5 text-center text-base"></i> Dashboard
-                </a>
-                <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-shapes w-5 text-center text-base"></i> Product Management
-                </a>
-                <a href="{{ route('purchases') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-cart-shopping w-5 text-center text-base"></i> Purchase Management
-                </a>
-                <a href="{{ route('inventory') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-boxes-stacked w-5 text-center text-base"></i> Inventory Management
-                </a>
-                <a href="{{ route('pos.sales') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-cash-register w-5 text-center text-base"></i> Sales Management (POS)
-                </a>
-                <a href="{{ route('repair.service') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-wrench w-5 text-center text-base"></i> Repair Service Management
-                </a>
-                <a href="{{ route('warranty') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-shield-halved w-5 text-center text-base"></i> Warranty Management
-                </a>
-                <a href="{{ route('invoices') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-base"></i> Payment & Invoice
-                </a>
-                <a href="{{ route('employees') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-user-group w-5 text-center text-base"></i> Employee Management
-                </a>
-                <a href="{{ route('customers') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-users w-5 text-center text-base"></i> Customer Management
-                </a>
-                <a href="{{ route('reports') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-chart-pie w-5 text-center text-base"></i> Report Management
-                </a>
-                <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
-                    <i class="fa-solid fa-bell w-5 text-center text-base"></i> Notification
-                </a>
-
-                <!-- Active Menu: Settings (រំលេចពណ៌ខៀវធំ ដូចក្នុង Mockup) -->
-                <div class="pt-1">
-                    <div class="bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-between px-3.5 py-2.5 cursor-pointer">
-                        <div class="flex items-center gap-3 font-semibold text-sm">
-                            <i class="fa-solid fa-gear text-base"></i> Settings
-                        </div>
-                        <i class="fa-solid fa-chevron-up text-xs"></i>
-                    </div>
-
-                    <!-- Submenu items -->
-                    <div class="pl-5 pr-2 py-2 space-y-1 text-xs">
-                        <a href="javascript:void(0)" onclick="switchTab('general')" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-white font-medium hover:bg-slate-800/50">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> System Settings
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchTab('roles')" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> User Roles & Permissions
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchTab('backup')" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Backup & Restore
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchTab('audit')" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Audit Logs
-                        </a>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- User Footer Profile -->
-            <div class="mt-auto p-4 border-t border-slate-800/80 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <img src="https://ui-avatars.com/api/?name=Sok+Dara&background=0284c7&color=fff" class="w-9 h-9 rounded-full object-cover border border-slate-700">
-                    <div>
-                        <h4 class="text-xs font-semibold text-white leading-tight">Sok Dara</h4>
-                        <p class="text-[10px] text-slate-400">Administrator</p>
-                    </div>
-                </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="text-slate-400 hover:text-red-400 transition" title="Logout">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </aside>
+    @include('sidebar')
 
     {{-- ===================================================================== --}}
     {{-- 2. MAIN CONTENT AREA                                                  --}}
     {{-- ===================================================================== --}}
-    <div class="flex-1 lg:pl-64 flex flex-col min-w-0">
+    <div class="flex-1 lg:ml-64 flex flex-col min-w-0">
 
         <!-- Top Header Navbar -->
         <header class="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-20 shadow-sm">

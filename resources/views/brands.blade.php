@@ -29,93 +29,12 @@
             - `route('name')`: បង្កើត URL ស្វ័យប្រវត្តិតាមឈ្មោះ Route ក្នុង `routes/web.php`
             - `request()->routeIs('...')`: ពិនិត្យមើល Route បច្ចុប្បន្ន ដើម្បីបន្ថែម Active Style លើ Menu
         -->
-        <aside class="w-64 bg-[#0f172a] text-slate-300 flex flex-col justify-between shrink-0 shadow-xl overflow-y-auto">
-            <div>
-                <!-- Logo -->
-                <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800/80">
-                    <div class="bg-blue-600 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-600/30">
-                        <i class="fa-solid fa-desktop text-lg"></i>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-lg text-white tracking-wider leading-none">TECHZONE</div>
-                        <div class="text-[10px] text-slate-400 mt-1">Computer Shop Management</div>
-                    </div>
-                </div>
-
-                <!-- Navigation Menu -->
-                <nav class="p-4 space-y-1.5 text-sm font-medium">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fa-solid fa-house w-5 text-center"></i> Dashboard
-                    </a>
-
-                    <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('products.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fa-solid fa-boxes-stacked w-5 text-center"></i> Product Management
-                    </a>
-
-                    <a href="{{ route('categories.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('categories.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                        <i class="fa-solid fa-layer-group w-5 text-center"></i> Category Management
-                    </a>
-
-                    <!-- Active Brand Management (Route ទៅកាន់ BrandController@index) -->
-                    <a href="{{ route('brands.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30">
-                        <i class="fa-solid fa-tags w-5 text-center"></i> Brand Management
-                    </a>
-
-                    <a href="{{ route('suppliers.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-truck-fast w-5 text-center"></i> Supplier Management
-                    </a>
-
-                    <a href="{{ route('customers') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-users w-5 text-center"></i> Customer Management
-                    </a>
-
-                    <a href="{{ route('purchases') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-cart-shopping w-5 text-center"></i> Purchase Management
-                    </a>
-
-                    <a href="{{ route('pos.sales') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-cash-register w-5 text-center"></i> Sales Management (POS)
-                    </a>
-
-                    <a href="{{ route('inventory') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-warehouse w-5 text-center"></i> Inventory Management
-                    </a>
-
-                    <a href="{{ route('repair.service') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-wrench w-5 text-center"></i> Repair Service Management
-                    </a>
-
-                    <a href="{{ route('warranty') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-shield-halved w-5 text-center"></i> Warranty Management
-                    </a>
-
-                    <a href="{{ route('invoices') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i> Payment & Invoice
-                    </a>
-
-                    <a href="{{ route('employees') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-user-gear w-5 text-center"></i> Employee Management
-                    </a>
-
-                    <a href="{{ route('reports') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-chart-line w-5 text-center"></i> Report Management
-                    </a>
-
-                    <a href="{{ route('notifications') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-bell w-5 text-center"></i> Notification
-                    </a>
-
-                    <a href="{{ route('settings') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-gear w-5 text-center"></i> Settings
-                    </a>
-                </nav>
-            </div>
-        </aside>
+        @include('sidebar')
 
         <!-- ========================================================================= -->
         <!-- 2. MAIN CONTENT AREA                                                      -->
         <!-- ========================================================================= -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50">
+        <main class="flex-1 lg:ml-64 flex flex-col overflow-y-auto bg-slate-50">
 
             <!-- Top Header Navbar (បង្ហាញ Auth User ពី Laravel Authentication) -->
             <header class="bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-xs">

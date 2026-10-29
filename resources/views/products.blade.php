@@ -2,22 +2,22 @@
 use Illuminate\Support\Str;
 
 $navItems = [
-['label' => 'Dashboard', 'icon' => 'fa-gauge-high', 'route' => 'dashboard'],
-['label' => 'Product Management', 'icon' => 'fa-boxes-stacked', 'route' => 'products.index'],
-['label' => 'Categories', 'icon' => 'fa-layer-group', 'route' => 'categories.index'],
-['label' => 'Brands', 'icon' => 'fa-copyright', 'route' => 'brands.index'],
-['label' => 'Suppliers', 'icon' => 'fa-truck-field', 'route' => 'suppliers.index'],
-['label' => 'Customers', 'icon' => 'fa-users', 'route' => 'customers.index'],
-['label' => 'Purchases', 'icon' => 'fa-cart-shopping', 'route' => 'purchases'],
-['label' => 'POS / Sales', 'icon' => 'fa-cash-register', 'route' => 'pos.sales'],
-['label' => 'Inventory', 'icon' => 'fa-warehouse', 'route' => 'inventory'],
-['label' => 'Repair Service', 'icon' => 'fa-screwdriver-wrench', 'route' => 'repair.service'],
-['label' => 'Warranty', 'icon' => 'fa-shield-halved', 'route' => 'warranty'],
-['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'invoices'],
-['label' => 'Employees', 'icon' => 'fa-id-badge', 'route' => 'employees'],
-['label' => 'Reports', 'icon' => 'fa-chart-line', 'route' => 'reports'],
-['label' => 'Notifications', 'icon' => 'fa-bell', 'route' => 'notifications'],
-['label' => 'Settings', 'icon' => 'fa-gear', 'route' => 'settings'],
+    ['label' => 'Dashboard', 'icon' => 'fa-house', 'route' => 'dashboard'],
+    ['label' => 'Products', 'icon' => 'fa-box-open', 'route' => 'products.index'],
+    ['label' => 'Categories', 'icon' => 'fa-layer-group', 'route' => 'categories.index'],
+    ['label' => 'Brands', 'icon' => 'fa-copyright', 'route' => 'brands.index'],
+    ['label' => 'Suppliers', 'icon' => 'fa-truck-fast', 'route' => 'suppliers.index'],
+    ['label' => 'Customers', 'icon' => 'fa-users', 'route' => 'customers.index'],
+    ['label' => 'Purchases', 'icon' => 'fa-cart-shopping', 'route' => 'purchases'],
+    ['label' => 'Inventory', 'icon' => 'fa-warehouse', 'route' => 'inventory'],
+    ['label' => 'POS / Sales', 'icon' => 'fa-cash-register', 'route' => 'pos.sales'],
+    ['label' => 'Repair Service', 'icon' => 'fa-wrench', 'route' => 'repair.service'],
+    ['label' => 'Warranty', 'icon' => 'fa-shield-halved', 'route' => 'warranty'],
+    ['label' => 'Invoices', 'icon' => 'fa-file-invoice-dollar', 'route' => 'invoices'],
+    ['label' => 'Employees', 'icon' => 'fa-user-gear', 'route' => 'employees'],
+    ['label' => 'Reports', 'icon' => 'fa-chart-pie', 'route' => 'reports'],
+    ['label' => 'Notifications', 'icon' => 'fa-bell', 'route' => 'notifications'],
+    ['label' => 'Settings', 'icon' => 'fa-gear', 'route' => 'settings'],
 ];
 @endphp
 <!DOCTYPE html>
@@ -95,84 +95,15 @@ $navItems = [
     <div class="flex min-h-screen">
 
         <!-- ================= SIDEBAR ================= -->
-        <aside class="hidden lg:flex lg:flex-col w-72 shrink-0 bg-[#0f172a] text-slate-300 min-h-screen sticky top-0 h-screen overflow-y-auto">
-            <div class="flex items-center gap-3 px-6 py-6 border-b border-white/10">
-                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30">
-                    <i class="fa-solid fa-desktop text-white text-lg"></i>
-                </div>
-                <div>
-                    <p class="text-white font-extrabold text-lg leading-none tracking-wide">TECHZONE</p>
-                    <p class="text-[11px] text-slate-400 mt-1">Computer Store System</p>
-                </div>
-            </div>
-
-            <nav class="flex-1 px-3 py-5 space-y-1">
-                <p class="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Main Menu</p>
-                @foreach ($navItems as $item)
-                @php
-                $isActive = Route::currentRouteName() === $item['route'] || ($item['route'] === 'products.index' && Str::startsWith(Route::currentRouteName() ?? '', 'products'));
-                @endphp
-                <a href="{{ route($item['route']) }}"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
-                   {{ $isActive
-                        ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30'
-                        : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
-                    <i class="fa-solid {{ $item['icon'] }} w-5 text-center {{ $isActive ? 'text-white' : 'text-slate-400' }}"></i>
-                    <span>{{ $item['label'] }}</span>
-                    @if ($isActive)
-                    <i class="fa-solid fa-circle text-[6px] ml-auto text-white"></i>
-                    @endif
-                </a>
-                @endforeach
-            </nav>
-
-            <div class="px-4 py-5 border-t border-white/10">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-rose-400 hover:bg-rose-500/10 transition">
-                        <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <!-- Mobile Sidebar -->
-        <aside id="mobileSidebar" class="lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-[#0f172a] text-slate-300 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
-            <div class="flex items-center justify-between px-6 py-6 border-b border-white/10">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30">
-                        <i class="fa-solid fa-desktop text-white text-lg"></i>
-                    </div>
-                    <p class="text-white font-extrabold text-lg tracking-wide">TECHZONE</p>
-                </div>
-                <button onclick="toggleMobileSidebar()" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            <nav class="px-3 py-5 space-y-1">
-                @foreach ($navItems as $item)
-                @php
-                $isActive = Route::currentRouteName() === $item['route'] || ($item['route'] === 'products.index' && Str::startsWith(Route::currentRouteName() ?? '', 'products'));
-                @endphp
-                <a href="{{ route($item['route']) }}"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150
-                   {{ $isActive ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
-                    <i class="fa-solid {{ $item['icon'] }} w-5 text-center"></i>
-                    <span>{{ $item['label'] }}</span>
-                </a>
-                @endforeach
-            </nav>
-        </aside>
-        <div id="mobileOverlay" onclick="toggleMobileSidebar()" class="hidden fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
+        @include('sidebar')
 
         <!-- ================= MAIN CONTENT ================= -->
-        <div class="flex-1 flex flex-col min-w-0">
+        <div class="flex-1 lg:ml-64 flex flex-col min-w-0">
 
             <!-- ============ TOPBAR ============ -->
             <header class="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4 shadow-xs">
                 <div class="flex items-center gap-3">
-                    <button onclick="toggleMobileSidebar()" class="lg:hidden text-slate-500 hover:text-slate-800 p-2 rounded-lg hover:bg-slate-100 transition">
+                    <button onclick="document.getElementById('sidebarMenu').classList.toggle('hidden')" class="lg:hidden text-slate-500 hover:text-slate-800 p-2 rounded-lg hover:bg-slate-100 transition">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
 
