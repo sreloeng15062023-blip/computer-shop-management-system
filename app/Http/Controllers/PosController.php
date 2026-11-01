@@ -85,6 +85,7 @@ class PosController extends Controller
      * - Add Loyalty Points to Customer
      * - Generate Invoice & Payment records
      */
+    // show functionality
     public function checkout(StoreSaleRequest $request)
     {
         $validated = $request->validator ? $request->validated() : $request->all();
@@ -102,7 +103,7 @@ class PosController extends Controller
             foreach ($items as $item) {
                 $product = Product::findOrFail($item['product_id']);
 
-                // Verify stock availability
+                // Verify stock availability// ផ្ទៀងផ្ទាត់ចំនួនស្តុកថានៅសល់គ្រប់គ្រាន់ឬអត់
                 if ($product->stock_quantity < $item['quantity']) {
                     throw new Exception("ទំនិញ '{$product->name}' នៅសល់ត្រឹមតែ {$product->stock_quantity} ប៉ុណ្ណោះ មិនគ្រប់គ្រាន់តាមចំនួនបញ្ជាទិញឡើយ។");
                 }
@@ -118,7 +119,7 @@ class PosController extends Controller
                     'warranty'     => $product->warranty_period_months ?? 12,
                 ];
             }
-
+                // គណនាបញ្ចុះតម្លៃ និងពន្ធ VAT 10%
             $discountPercent = floatval($validated['discount_percentage'] ?? 0);
             $discountAmount = round(($subtotal * $discountPercent) / 100, 2);
 
@@ -138,8 +139,8 @@ class PosController extends Controller
             $nextSaleId = (Sale::max('id') ?? 0) + 1;
             $saleNumber = 'POS-' . date('Y') . '-' . str_pad($nextSaleId, 4, '0', STR_PAD_LEFT);
 
-            // 3. Create Sale Record
-            $sale = Sale::create([
+            // 3. Create Sale Record// បង្កើតវិក្កយបត្រលក់ (Sale Record)
+            $sale = Sale::create([ // កាត់ចំនួនស្តុកចេញពី Products & កត់ត្រា Stock Out Transaction
                 'sale_number'         => $saleNumber,
                 'customer_id'         => $customerId,
                 'user_id'             => $userId,

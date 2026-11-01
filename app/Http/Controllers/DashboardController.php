@@ -275,7 +275,7 @@ class DashboardController extends Controller
                 $topSellingProducts[] = [
                     'rank' => $rank++,
                     'name' => $item->product->name,
-                    'thumbnail' => $item->product->thumbnail,
+                    'thumbnail' => $item->product->thumbnail_url,
                     'sold_qty' => (int) $item->sold_qty,
                     'revenue' => (float) $item->revenue
                 ];
@@ -292,7 +292,7 @@ class DashboardController extends Controller
                 $topSellingProducts[] = [
                     'rank' => $rank++,
                     'name' => $ep->name,
-                    'thumbnail' => $ep->thumbnail,
+                    'thumbnail' => $ep->thumbnail_url,
                     'sold_qty' => $mockSold[$idx] ?? 5,
                     'revenue' => $mockRev[$idx] ?? ($ep->selling_price * 5)
                 ];

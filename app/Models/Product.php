@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -34,6 +35,27 @@ class Product extends Model
         'min_stock_alert' => 'integer',
         'warranty_period_months' => 'integer',
     ];
+
+    protected $appends = [
+        'thumbnail_url',
+    ];
+
+    public function getThumbnailUrlAttribute()
+    {
+        if (empty($this->thumbnail)) {
+            return 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80';
+        }
+
+        if (Str::startsWith($this->thumbnail, ['http://', 'https://'])) {
+            return $this->thumbnail;
+        }
+
+        if (Str::startsWith($this->thumbnail, 'storage/')) {
+            return asset($this->thumbnail);
+        }
+
+        return asset('storage/' . $this->thumbnail);
+    }
 
     // Relations
     public function category() { return $this->belongsTo(Category::class); }

@@ -441,8 +441,11 @@
                                         </td>
                                         <td class="py-3 px-3">
                                             <div class="flex items-center gap-3">
-                                                @if(!empty($item['thumbnail']) && file_exists(public_path($item['thumbnail'])))
-                                                    <img src="{{ asset($item['thumbnail']) }}" class="w-8 h-8 rounded-lg object-cover border border-slate-200" alt="{{ $item['name'] }}">
+                                                @if(!empty($item['thumbnail']))
+                                                    <img src="{{ $item['thumbnail'] }}" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" class="w-8 h-8 rounded-lg object-cover border border-slate-200" alt="{{ $item['name'] }}">
+                                                    <div class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 hidden flex items-center justify-center text-slate-500 text-sm">
+                                                        <i class="fa-solid fa-laptop"></i>
+                                                    </div>
                                                 @else
                                                     <div class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 text-sm">
                                                         <i class="fa-solid fa-laptop"></i>

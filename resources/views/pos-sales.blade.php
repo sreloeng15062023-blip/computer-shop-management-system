@@ -194,15 +194,16 @@
                     <div id="productGridContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
                         @forelse($products as $product)
                             <div class="product-card bg-white rounded-2xl border border-slate-200 p-3 shadow-sm hover:shadow-md hover:border-blue-400 transition cursor-pointer flex flex-col justify-between group"
-                                 onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', '{{ $product->sku }}', {{ $product->selling_price }}, {{ $product->stock_quantity }}, '{{ $product->thumbnail ?? 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80' }}')"
+                                 onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', '{{ $product->sku }}', {{ $product->selling_price }}, {{ $product->stock_quantity }}, '{{ $product->thumbnail_url }}')"
                                  data-name="{{ strtolower($product->name) }}"
                                  data-sku="{{ strtolower($product->sku) }}"
                                  data-barcode="{{ strtolower($product->barcode ?? '') }}"
                                  data-category="{{ $product->category->name ?? 'Others' }}">
                                 
                                 <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-50 mb-2.5 flex items-center justify-center">
-                                    <img src="{{ $product->thumbnail ?: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80' }}"
+                                    <img src="{{ $product->thumbnail_url }}"
                                          alt="{{ $product->name }}"
+                                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80';"
                                          class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                     @if($product->stock_quantity <= 0)
                                         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px] flex items-center justify-center text-white text-[11px] font-bold">
@@ -629,10 +630,10 @@
         const sampleProducts = @json($products);
         if (sampleProducts && sampleProducts.length >= 4) {
             // Add initial 4 items to match mockup screenshot
-            addToCart(sampleProducts[0].id, sampleProducts[0].name, sampleProducts[0].sku, sampleProducts[0].selling_price, sampleProducts[0].stock_quantity, sampleProducts[0].thumbnail, 1);
-            addToCart(sampleProducts[2].id, sampleProducts[2].name, sampleProducts[2].sku, sampleProducts[2].selling_price, sampleProducts[2].stock_quantity, sampleProducts[2].thumbnail, 1);
-            addToCart(sampleProducts[3].id, sampleProducts[3].name, sampleProducts[3].sku, sampleProducts[3].selling_price, sampleProducts[3].stock_quantity, sampleProducts[3].thumbnail, 1);
-            addToCart(sampleProducts[4].id, sampleProducts[4].name, sampleProducts[4].sku, sampleProducts[4].selling_price, sampleProducts[4].stock_quantity, sampleProducts[4].thumbnail, 1);
+            addToCart(sampleProducts[0].id, sampleProducts[0].name, sampleProducts[0].sku, sampleProducts[0].selling_price, sampleProducts[0].stock_quantity, sampleProducts[0].thumbnail_url || sampleProducts[0].thumbnail, 1);
+            addToCart(sampleProducts[2].id, sampleProducts[2].name, sampleProducts[2].sku, sampleProducts[2].selling_price, sampleProducts[2].stock_quantity, sampleProducts[2].thumbnail_url || sampleProducts[2].thumbnail, 1);
+            addToCart(sampleProducts[3].id, sampleProducts[3].name, sampleProducts[3].sku, sampleProducts[3].selling_price, sampleProducts[3].stock_quantity, sampleProducts[3].thumbnail_url || sampleProducts[3].thumbnail, 1);
+            addToCart(sampleProducts[4].id, sampleProducts[4].name, sampleProducts[4].sku, sampleProducts[4].selling_price, sampleProducts[4].stock_quantity, sampleProducts[4].thumbnail_url || sampleProducts[4].thumbnail, 1);
         }
     });
 
@@ -739,7 +740,7 @@
                 <div class="py-2.5 flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5 flex-1 min-w-0">
                         <span class="text-[11px] font-mono text-slate-400 w-4">${index + 1}</span>
-                        <img src="${item.thumbnail}" alt="${item.name}" class="w-9 h-9 rounded-lg object-cover bg-slate-50 border border-slate-100 flex-shrink-0">
+                        <img src="${item.thumbnail || 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80'}" alt="${item.name}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80';" class="w-9 h-9 rounded-lg object-cover bg-slate-50 border border-slate-100 flex-shrink-0">
                         <div class="min-w-0 flex-1">
                             <h5 class="text-xs font-bold text-slate-800 truncate" title="${item.name}">${item.name}</h5>
                             <p class="text-[10px] text-slate-400 font-mono">${item.sku}</p>
