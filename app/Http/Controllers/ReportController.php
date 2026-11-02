@@ -29,6 +29,12 @@ class ReportController extends Controller
      * Display Report Management View (Feature #14)
      * Supports 12 distinct reports + Print + PDF + Excel export.
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ២ - Functionality] Report: ទំព័ររបាយការណ៍សរុប (Daily Sales, Inventory, Revenue)
+     * ភាសា: PHP
+     * =========================================================================
+     */
     public function index(Request $request)
     {
         $reportType = $request->input('type', 'daily_sales');
@@ -377,6 +383,12 @@ class ReportController extends Controller
 
     /**
      * Print View for Reports (Feature #14 Print & PDF)
+     */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ២ - Functionality] Print Report: ព្រីនរបាយការណ៍ជាឯកសារ (Print Preview / Hard Copy)
+     * ភាសា: PHP
+     * =========================================================================
      */
     public function printReport(Request $request)
     {

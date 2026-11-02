@@ -85,7 +85,9 @@ class PosController extends Controller
      * - Add Loyalty Points to Customer
      * - Generate Invoice & Payment records
      */
-    // show functionality
+    // =========================================================================
+    // មុខងារក្នុងស្លាយ៖ POS Counter (គិតលុយ, បញ្ចុះតម្លៃ, គណនាពន្ធ VAT 10% និងកាត់ស្តុក Real-time)
+    // =========================================================================
     public function checkout(StoreSaleRequest $request)
     {
         $validated = $request->validator ? $request->validated() : $request->all();
@@ -103,6 +105,11 @@ class PosController extends Controller
             foreach ($items as $item) {
                 $product = Product::findOrFail($item['product_id']);
 
+
+
+
+
+
                 // Verify stock availability// ផ្ទៀងផ្ទាត់ចំនួនស្តុកថានៅសល់គ្រប់គ្រាន់ឬអត់
                 if ($product->stock_quantity < $item['quantity']) {
                     throw new Exception("ទំនិញ '{$product->name}' នៅសល់ត្រឹមតែ {$product->stock_quantity} ប៉ុណ្ណោះ មិនគ្រប់គ្រាន់តាមចំនួនបញ្ជាទិញឡើយ។");
@@ -119,10 +126,21 @@ class PosController extends Controller
                     'warranty'     => $product->warranty_period_months ?? 12,
                 ];
             }
+
+
+
+
+
                 // គណនាបញ្ចុះតម្លៃ និងពន្ធ VAT 10%
+            // =========================================================================
+            // [ស្លាយទី ១ - Functionality] រូបមន្តគណនា បញ្ចុះតម្លៃ (Discount) និង ពន្ធ VAT 10%
+            // =========================================================================
+            // ១. ទឹកប្រាក់បញ្ចុះតម្លៃ = (Subtotal * % Discount) / 100
             $discountPercent = floatval($validated['discount_percentage'] ?? 0);
             $discountAmount = round(($subtotal * $discountPercent) / 100, 2);
 
+            // ២. តម្លៃជាប់ពន្ធ = Subtotal ដក ប្រាក់បញ្ចុះតម្លៃ
+            // ៣. ទឹកប្រាក់ពន្ធ VAT 10% = (តម្លៃជាប់ពន្ធ * 10) / 100
             $taxPercent = floatval($validated['tax_percentage'] ?? 10);
             $taxableAmount = max(0, $subtotal - $discountAmount);
             $taxAmount = round(($taxableAmount * $taxPercent) / 100, 2);
@@ -139,8 +157,9 @@ class PosController extends Controller
             $nextSaleId = (Sale::max('id') ?? 0) + 1;
             $saleNumber = 'POS-' . date('Y') . '-' . str_pad($nextSaleId, 4, '0', STR_PAD_LEFT);
 
-            // 3. Create Sale Record// បង្កើតវិក្កយបត្រលក់ (Sale Record)
-            $sale = Sale::create([ // កាត់ចំនួនស្តុកចេញពី Products & កត់ត្រា Stock Out Transaction
+            // 3. Create Sale Record// 
+            // បង្កើតវិក្កយបត្រលក់ (Sale Record)
+            $sale = Sale::create([ 
                 'sale_number'         => $saleNumber,
                 'customer_id'         => $customerId,
                 'user_id'             => $userId,
@@ -159,7 +178,12 @@ class PosController extends Controller
                 'notes'               => $validated['notes'] ?? null,
             ]);
 
-            // 4. Save Sale Details & Decrement Product Stock & Log Inventory Transaction (Stock Out)
+
+
+            // =========================================================================
+            // [ស្លាយទី ១ - Functionality] Inventory Stock Tracking: កាត់ស្តុក Real-time ពេលលក់ & កត់ត្រា Stock Out
+            // =========================================================================
+            // កាត់ចំនួនស្តុកចេញពី Products & កត់ត្រា Stock Out Transaction
             foreach ($saleItemsData as $itemData) {
                 $product = $itemData['product'];
                 $qtySold = $itemData['quantity'];
@@ -177,6 +201,7 @@ class PosController extends Controller
                 ]);
 
                 // Decrement Stock
+                // កាត់ចំនួនស្តុកចេញពីតារាង products (Real-time Deduction)
                 $product->stock_quantity = $stockAfter;
                 if ($stockAfter <= 0) {
                     $product->status = 'Out of Stock';

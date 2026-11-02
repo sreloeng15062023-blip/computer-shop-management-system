@@ -82,6 +82,12 @@ class SettingController extends Controller
     /**
      * FUNCTION 4: createBackup() - បង្កើត Database Backup (.sql) តាមតម្រូវការ Assignment
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ២ - Functionality] Backup: បង្កើតឯកសារ Database Backup (.sql)
+     * ភាសា: PHP
+     * =========================================================================
+     */
     public function createBackup(Request $request)
     {
         $backupDir = storage_path('app/backups');
@@ -92,17 +98,17 @@ class SettingController extends Controller
         $fileName = 'backup_' . date('Y_m_d_His') . '.sql';
         $filePath = $backupDir . '/' . $fileName;
 
-        $tables = DB::select('SHOW TABLES');
+        $tables = DB::select('SHOW TABLES'); // ១. ទាញយកឈ្មោះ Table ទាំងអស់
         $dbKey = 'Tables_in_' . env('DB_DATABASE');
 
         $dump = "-- TECHZONE Database Backup\n-- Date: " . now() . "\n\n";
 
         foreach ($tables as $table) {
             $tableName = $table->$dbKey;
-            $create = DB::select("SHOW CREATE TABLE `{$tableName}`");
+            $create = DB::select("SHOW CREATE TABLE `{$tableName}`");// ២. ចម្លងរចនាសម្ព័ន្ធ Table
             $dump .= "\n\n" . $create[0]->{'Create Table'} . ";\n\n";
 
-            $rows = DB::table($tableName)->get();
+            $rows = DB::table($tableName)->get();//៣. ចម្លងទិន្នន័យគ្រប់ Rows
             foreach ($rows as $row) {
                 $values = array_map(function ($val) {
                     return is_null($val) ? 'NULL' : "'" . addslashes($val) . "'";
@@ -111,7 +117,7 @@ class SettingController extends Controller
             }
         }
 
-        File::put($filePath, $dump);
+        File::put($filePath, $dump);// ៤. រក្សាទុកជា File .sql ក្នុង Folder storage/app/backups
 
         return response()->json([
             'success' => true,

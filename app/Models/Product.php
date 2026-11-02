@@ -6,10 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+// =========================================================================
+// [ស្លាយទី ៤ - Code Quality] OOP (Object-Oriented Programming):
+// ១. Inheritance (ការទទួលមរតក): Product ទទួលសមត្ថភាព Database ពី Model មេ
+// =========================================================================
 class Product extends Model
 {
     use HasFactory;
 
+    // =========================================================================
+    // [ស្លាយទី ៤ - Security] Mass Assignment Protection ($fillable)
+    // ប្រើដើម្បី: កំណត់បញ្ជីឈ្មោះ Field ដែលអនុញ្ញាតឱ្យ Save ចូល Database (Whitelist)
+    // [ស្លាយទី ៤ - Code Quality] OOP Encapsulation: ប្រើ 'protected' ដើម្បីការពារទិន្នន័យ
+    // =========================================================================
     protected $fillable = [
         'category_id',
         'brand_id',
@@ -57,6 +66,10 @@ class Product extends Model
         return asset('storage/' . $this->thumbnail);
     }
 
+    // =========================================================================
+    // [ស្លាយ Code Quality - ចំណុចទី ៣] Model កំណត់ Relational Relationships
+    // កំណត់ទំនាក់ទំនងរវាងតារាង (belongsTo, hasMany) តាមស្តង់ដារ Eloquent ORM
+    // =========================================================================
     // Relations
     public function category() { return $this->belongsTo(Category::class); }
     public function brand() { return $this->belongsTo(Brand::class); }

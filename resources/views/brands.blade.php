@@ -315,7 +315,11 @@
     {{--
         ចំណុចភ្ជាប់ Backend:
         - `action="{{ route('brands.store') }}"`: ផ្ញើ POST Request ទៅកាន់ Route `brands.store` -> `BrandController@store`
-        - `@csrf`: Laravel CSRF Token ការពារសុវត្ថិភាពពីការក្លែងបន្លំ Request (ខ្វះវានឹង Error 419 Page Expired)
+        - `{{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
+                @csrf`: Laravel CSRF Token ការពារសុវត្ថិភាពពីការក្លែងបន្លំ Request (ខ្វះវានឹង Error 419 Page Expired)
         - `name="brand_name"`: ផ្គូផ្គងជាមួយ Field `brand_name` ក្នុង Validation Rule នៃ `StoreBrandRequest` & Database Column
         - `name="country"`: ផ្គូផ្គងជាមួយ Field `country` ក្នុង Database Column
         - `name="description"`: ផ្គូផ្គងជាមួយ Field `description` ក្នុង Database Column
@@ -339,6 +343,10 @@
 
             <!-- Form បញ្ចូលទិន្នន័យ (CREATE) -->
             <form method="POST" action="{{ route('brands.store') }}" class="p-6 space-y-4">
+                {{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
                 @csrf
                 <!-- Brand Name Input -->
                 <div>
@@ -382,7 +390,11 @@
     {{--
         ចំណុចភ្ជាប់ Backend:
         - `id="editForm"`: នឹងត្រូវបានកំណត់ Action URL តាមរយៈ JavaScript: `document.getElementById('editForm').action = '/brands/' + brand.id`
-        - `@csrf`: Laravel CSRF Protection Token
+        - `{{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
+                @csrf`: Laravel CSRF Protection Token
         - `@method('PUT')`: Laravel Method Spoofing (ព្រោះ HTML Form មិន Support Method PUT ដោយផ្ទាល់)
         - Form នេះនឹងផ្ញើទៅកាន់ Route `brands.update` (`PUT /brands/{brand}`) -> `BrandController@update`
         - `id="edit_brand_name"`, `id="edit_country"`, `id="edit_description"`, `id="edit_status"`: ទទួលទិន្នន័យពី JavaScript ដើម្បីបង្ហាញលើ Form ពេលចុច Edit
@@ -405,6 +417,10 @@
 
             <!-- Form កែប្រែទិន្នន័យ (UPDATE) -->
             <form id="editForm" method="POST" action="" class="p-6 space-y-4">
+                {{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
                 @csrf
                 @method('PUT')
                 
@@ -510,7 +526,11 @@
     {{--
         ចំណុចភ្ជាប់ Backend:
         - `id="deleteForm"`: នឹងត្រូវបានកំណត់ Action URL តាមរយៈ JavaScript: `document.getElementById('deleteForm').action = '/brands/' + id`
-        - `@csrf`: Laravel CSRF Protection Token
+        - `{{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
+                @csrf`: Laravel CSRF Protection Token
         - `@method('DELETE')`: Laravel Method Spoofing ដើម្បីឱ្យ Laravel Router ស្គាល់ថាជា DELETE Request
         - Form នេះនឹងផ្ញើទៅកាន់ Route `brands.destroy` (`DELETE /brands/{brand}`) -> `BrandController@destroy`
     --}}
@@ -528,6 +548,10 @@
 
             <!-- Form លុបទិន្នន័យ (DELETE) -->
             <form id="deleteForm" method="POST" action="" class="mt-6 flex items-center justify-center gap-3">
+                {{-- =========================================================================
+                    [ស្លាយទី ៤ - Security] CSRF Protection (@csrf Token)
+                    ប្រើដើម្បី: ការពារការលួចក្លែងបន្លំចុច Submit Form ពីគេហទំព័រខាងក្រៅ (Error 419)
+                ========================================================================= --}}
                 @csrf
                 @method('DELETE')
                 <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">Cancel</button>

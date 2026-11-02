@@ -213,6 +213,10 @@ class NotificationController extends Controller
     private function syncRealTimeAlerts()
     {
         // ១. តម្រូវការ ១: Low Stock Alert (ទំនិញសល់ <= 5 ក្នុងស្តុក)
+        // =========================================================================
+        // [ស្លាយទី ២ - Functionality] Notification Alert: Low Stock (ស្កេនទំនិញជិតអស់ស្តុក)
+        // ភាសា: PHP (Laravel Eloquent)
+        // =========================================================================
         if (class_exists(\App\Models\Product::class)) {
             $lowStockProducts = \App\Models\Product::where('stock_quantity', '<=', 5)
                 ->where('status', '!=', 'Discontinued')

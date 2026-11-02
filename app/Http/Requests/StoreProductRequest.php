@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+// =========================================================================
+// [ស្លាយ Code Quality - ចំណុចទី ២] Form Request ទទួលបន្ទុកតែលើ Validation
+// គោលការណ៍: Fat Model, Skinny Controller (កាត់បន្ថយ Controller កុំឱ្យធំពេក)
+// =========================================================================
 class StoreProductRequest extends FormRequest
 {
     public function authorize() { return true; }

@@ -15,10 +15,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
+// =========================================================================
+// [ស្លាយទី ៤ - Code Quality] OOP (Object-Oriented Programming) ក្នុង Controller:
+// - Class & Inheritance: ProductController ទទួលមរតកពី Controller មេរបស់ Laravel
+// - Encapsulation & Polymorphism: ផ្ទុក Methods (index, store, update, destroy)
+// =========================================================================
 class ProductController extends Controller
 {
     /**
      * 1. បង្ហាញបញ្ជី Products (Search, Category Filter, Brand Filter, Status Filter & Pagination)
+     */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ២ - Functionality] CRUD Product, Search, Filter តាម Brands, Category & Pagination
+     * ភាសា: PHP (Laravel Query Builder)
+     * =========================================================================
      */
     public function index(Request $request)
     {
@@ -66,6 +77,7 @@ class ProductController extends Controller
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json(['status' => true, 'data' => $products], 200);
         }
+        
 
         return view('products', compact(
             'products',

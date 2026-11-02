@@ -40,7 +40,11 @@ class UserSeeder extends Seeder
             [
                 'name'              => 'Admin User',
                 'email'             => 'admin@shop.com',
-                'password'          => Hash::make('password123'), // Securely hash the password with bcrypt
+                // =========================================================================
+                // [ស្លាយទី ៤ - Security] Password Hashing (Bcrypt Algorithm)
+                // ប្រើដើម្បី: បំប្លែងលេខសម្ងាត់ឱ្យទៅជាកូដញ៉ាំញ៉ូវ ៦០ តួអក្សរ មិនអាចមើលដឹងឡើយ (One-way Hash)
+                // =========================================================================
+                'password'          => Hash::make('password123'),
                 'role_id'           => $adminRole ? $adminRole->id : null,
                 'email_verified_at' => now(), // Mark email as verified
             ],

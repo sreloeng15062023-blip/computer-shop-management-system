@@ -167,6 +167,12 @@ class WarrantyController extends Controller
     /**
      * Lookup Warranty by Serial Number or Warranty Code (Step 5.3)
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] Warranty Tracker: ឆែកសុពលភាពធានាតាមរយៈលេខ Serial Number / IMEI
+     * ភាសា: PHP (Laravel Eloquent)
+     * =========================================================================
+     */
     public function lookup(Request $request)
     {
         $serial = $request->query('query');

@@ -779,6 +779,12 @@
     /**
      * Calculate Subtotal, Discount %, Tax 10%, and Grand Total
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] ភាសា: JavaScript (Frontend Calculation)
+     * រូបមន្តគណនា Subtotal, បញ្ចុះតម្លៃ (Discount %), ពន្ធ VAT 10% និងតម្លៃសរុប (Grand Total)
+     * =========================================================================
+     */
     function calculateTotals() {
         let subtotal = 0;
         cart.forEach(item => {
@@ -790,9 +796,12 @@
         if (discountPercent < 0) discountPercent = 0;
         if (discountPercent > 100) discountPercent = 100;
 
+        // ១. រូបមន្តបញ្ចុះតម្លៃ: Discount Amount = (Subtotal * Discount %) / 100
         const discountAmount = (subtotal * discountPercent) / 100;
         const taxableAmount = Math.max(0, subtotal - discountAmount);
+        // ២. រូបមន្តគណនាពន្ធ VAT 10%: Tax Amount = (តម្លៃក្រោយបញ្ចុះតម្លៃ * 10%)
         const taxAmount = (taxableAmount * 0.10); // 10% Tax rate
+        // ៣. រូបមន្តតម្លៃសរុប: Grand Total = តម្លៃក្រោយបញ្ចុះតម្លៃ + ពន្ធ VAT 10%
         const totalAmount = taxableAmount + taxAmount;
 
         document.getElementById('subtotalDisplay').textContent = `$${subtotal.toFixed(2)}`;

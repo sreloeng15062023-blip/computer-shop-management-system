@@ -32,6 +32,10 @@ Route::get('/auth/{provider}', function ($provider) {
 // =========================================================================
 // Protected Web Application Routes (Requires Authentication)
 // =========================================================================
+// =========================================================================
+// [ស្លាយទី ៤ - Security] Route Protection (Authentication Middleware)
+// ប្រើដើម្បី: ធ្វើជាឆ្មាំទ្វារ ការពារមិនឱ្យមនុស្សក្រៅដែលមិនទាន់ Login អាចចូលប្រើប្រព័ន្ធបាន
+// =========================================================================
 Route::middleware(['auth'])->group(function () {
 
     // 1. Dashboard (Phase 7: Feature #2 Dashboard)

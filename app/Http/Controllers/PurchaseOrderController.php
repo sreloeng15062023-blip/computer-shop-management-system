@@ -371,6 +371,12 @@ class PurchaseOrderController extends Controller
      * HELPER METHOD: ដំណើរការបូកស្តុកទំនិញ និងកត់ត្រាចរន្តស្តុក (Step 3.2 Logic)
      * =========================================================================
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] Inventory Stock Tracking: បន្ថែមស្តុកពេល Receive ទំនិញពី Purchase Order
+     * ភាសា: PHP (Laravel Eloquent)
+     * =========================================================================
+     */
     protected function processStockInForOrder(PurchaseOrder $order, $userId)
     {
         foreach ($order->details as $detail) {

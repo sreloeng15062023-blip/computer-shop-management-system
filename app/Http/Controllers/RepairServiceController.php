@@ -100,6 +100,12 @@ class RepairServiceController extends Controller
     /**
      * Store a new repair request (Step 5.1)
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] Repair Lifecycle ជំហានទី ១: ទទួលកុំព្យូទ័រខូច & កត់ត្រារោគសញ្ញា
+     * ភាសា: PHP
+     * =========================================================================
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -153,6 +159,13 @@ class RepairServiceController extends Controller
     /**
      * Update Repair Status (Step 5.1: Received -> Diagnosing -> Waiting for Parts -> Repairing -> Testing -> Completed)
      */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] Repair Lifecycle ជំហានទី ២: វិភាគរោគសញ្ញា & បញ្ចប់ការជួសជុល (Status Update)
+     * ភាសា: PHP
+     * =========================================================================
+     */
+    
     public function updateStatus(Request $request, $id)
     {
         $repair = RepairService::findOrFail($id);
@@ -199,6 +212,12 @@ class RepairServiceController extends Controller
      * - Logs Stock Out in inventory_transactions
      * - Adds to repair_parts table
      * - Recalculates repair_services total_cost
+     */
+    /**
+     * =========================================================================
+     * [ស្លាយទី ១ - Functionality] Repair Lifecycle ជំហានទី ៣: ដូរគ្រឿងបន្លាស់ & កាត់ស្តុកគ្រឿងបន្លាស់
+     * ភាសា: PHP
+     * =========================================================================
      */
     public function addPart(Request $request, $id)
     {
