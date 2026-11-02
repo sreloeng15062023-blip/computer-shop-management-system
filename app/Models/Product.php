@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
+// =========================================================================
+// [ស្លាយទី ៤ - Code Quality] OOP (Object-Oriented Programming):
+// ១. Inheritance (ការទទួលមរតក): Product ទទួលសមត្ថភាព Database ពី Model មេ
+// =========================================================================
+class Product extends Model
+{
+    use HasFactory;
+
+    // =========================================================================
+    // [ស្លាយទី ៤ - Security] Mass Assignment Protection ($fillable)
+    // ប្រើដើម្បី: កំណត់បញ្ជីឈ្មោះ Field ដែលអនុញ្ញាតឱ្យ Save ចូល Database (Whitelist)
+    // [ស្លាយទី ៤ - Code Quality] OOP Encapsulation: ប្រើ 'protected' ដើម្បីការពារទិន្នន័យ
+    // =========================================================================
+    protected $fillable = [
+        'category_id',
+        'brand_id',
+        'supplier_id',
+        'name',
+        'sku',
+        'barcode',
+        'cost_price',
+        'selling_price',
+        'stock_quantity',
+        'min_stock_alert',
+        'warranty_period_months',
+        'specifications',
+        'description',
+        'thumbnail',
+        'status',
+    ];
+
+    protected $casts = [
+        'cost_price' => 'decimal:2',
+        'selling_price' => 'decimal:2',
+        'stock_quantity' => 'integer',
+        'min_stock_alert' => 'integer',
+        'warranty_period_months' => 'integer',
+    ];
+
+    protected $appends = [
+        'thumbnail_url',
+    ];
+
+    public function getThumbnailUrlAttribute()
+    {
+        if (empty($this->thumbnail)) {
+            return 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=200&h=200&q=80';
+        }
+
+        if (Str::startsWith($this->thumbnail, ['http://', 'https://'])) {
+            return $this->thumbnail;
+        }
+
+        if (Str::startsWith($this->thumbnail, 'storage/')) {
+            return asset($this->thumbnail);
+        }
+
+        return asset('storage/' . $this->thumbnail);
+    }
+
+    // =========================================================================
+    // [ស្លាយ Code Quality - ចំណុចទី ៣] Model កំណត់ Relational Relationships
+    // កំណត់ទំនាក់ទំនងរវាងតារាង (belongsTo, hasMany) តាមស្តង់ដារ Eloquent ORM
+    // =========================================================================
+    // Relations
+    public function category() { return $this->belongsTo(Category::class); }
+    public function brand() { return $this->belongsTo(Brand::class); }
+    public function supplier() { return $this->belongsTo(Supplier::class); }
+    public function serials() { return $this->hasMany(ProductSerial::class); }
+    public function images() { return $this->hasMany(ProductImage::class); }
+    public function barcodes() { return $this->hasMany(Barcode::class); }
+    public function primaryBarcode() { return $this->hasOne(Barcode::class)->where('is_primary', true); }
+    public function purchaseOrderDetails() { return $this->hasMany(PurchaseOrderDetail::class); }
+    public function inventoryTransactions() { return $this->hasMany(InventoryTransaction::class); }
+
+    public function getMinStockLevelAttribute() { return $this->min_stock_alert; }
+}

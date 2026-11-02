@@ -21,10 +21,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // 1. Seed Roles first so that the 'roles' table is populated with Admin, Cashier, etc.
+        // 1. Seed Roles first (Admin, Cashier, Technician, Manager)
         $this->call(RoleSeeder::class);
 
-        // 2. Seed Users next so that users can be linked to the roles created above
+        // 2. Seed Users (Admin user linked to Admin role)
         $this->call(UserSeeder::class);
+
+        // 3. Seed Brands (Asus, Dell, HP, MSI, etc.)
+        $this->call(BrandSeeder::class);
+
+        // 4. Seed Suppliers (PTC, Anana, Chhay Hout, etc.)
+        $this->call(SupplierSeeder::class);
+
+        // 5. Seed Customers (Retail & Wholesale customers)
+        $this->call(CustomerSeeder::class);
+
+        // 6. Seed Categories & Products
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
+
+        // 7. Seed Purchase Orders & Inventory Transactions (Phase 3)
+        $this->call(PurchaseOrderSeeder::class);
+         // 8. Seed Notifications (Feature #15)
+        $this->call(NotificationSeeder::class);
+
+        // 9. Seed Settings (Feature #16)
+        $this->call(SettingSeeder::class);
     }
 }

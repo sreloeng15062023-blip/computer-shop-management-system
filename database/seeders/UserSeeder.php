@@ -30,6 +30,8 @@ class UserSeeder extends Seeder
     {
         // 1. Fetch the Role models from the database
         $adminRole      = Role::where('role_name', 'Admin')->first();
+        $managerRole    = Role::where('role_name', 'Manager')->first();
+        $salesRole      = Role::where('role_name', 'Sale Staff')->first();
         $cashierRole    = Role::where('role_name', 'Cashier')->first();
         $technicianRole = Role::where('role_name', 'Technician')->first();
 
@@ -38,9 +40,27 @@ class UserSeeder extends Seeder
             [
                 'name'              => 'Admin User',
                 'email'             => 'admin@shop.com',
-                'password'          => Hash::make('password123'), // Securely hash the password with bcrypt
+                // =========================================================================
+                // [ស្លាយទី ៤ - Security] Password Hashing (Bcrypt Algorithm)
+                // ប្រើដើម្បី: បំប្លែងលេខសម្ងាត់ឱ្យទៅជាកូដញ៉ាំញ៉ូវ ៦០ តួអក្សរ មិនអាចមើលដឹងឡើយ (One-way Hash)
+                // =========================================================================
+                'password'          => Hash::make('password123'),
                 'role_id'           => $adminRole ? $adminRole->id : null,
                 'email_verified_at' => now(), // Mark email as verified
+            ],
+            [
+                'name'              => 'Store Manager',
+                'email'             => 'manager@shop.com',
+                'password'          => Hash::make('password123'),
+                'role_id'           => $managerRole ? $managerRole->id : null,
+                'email_verified_at' => now(),
+            ],
+            [
+                'name'              => 'Sales Staff',
+                'email'             => 'sales@shop.com',
+                'password'          => Hash::make('password123'),
+                'role_id'           => $salesRole ? $salesRole->id : null,
+                'email_verified_at' => now(),
             ],
             [
                 'name'              => 'Cashier Staff',

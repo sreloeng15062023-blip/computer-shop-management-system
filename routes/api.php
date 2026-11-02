@@ -1,4 +1,6 @@
 <?php
+use App\Http\Controllers\SupplierController;// បន្ថែមពេលធ្វើsupplier management
+use App\Http\Controllers\ProductController; // បន្ថែមពេលធ្វើ product management
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,3 +41,41 @@ Route::prefix('auth')->group(function () {
 // =========================================================================
 // Standard REST API endpoints: GET, POST, PUT, DELETE for /api/roles
 Route::apiResource('roles', RoleController::class);
+
+
+use App\Http\Controllers\BrandController; // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+
+// 3. Brand Management API   // បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+Route::apiResource('brands', BrandController::class);// បន្ថែមពេលបង្កើតbrand ដើម្បីយកទៅតេស្ដលើPostman
+
+use App\Http\Controllers\CategoryController; // បន្ថែមពេលធ្វើ category management
+
+// Category Management API
+Route::apiResource('categories', CategoryController::class)->names('api.categories');
+
+
+
+
+// 4. Supplier Management API // បន្ថែមពេលធ្វើsupplier management
+Route::apiResource('suppliers', SupplierController::class)->names('api.suppliers');
+
+use App\Http\Controllers\CustomerController; // បន្ថែមពេលធ្វើ customer management
+
+// 5. Customer Management API // បន្ថែមពេលធ្វើ Customer Management ដើម្បីយកទៅតេស្ដលើ Postman
+Route::apiResource('customers', CustomerController::class)->names('api.customers');
+
+
+// 6. Product Management API // បន្ថែមពេលធ្វើ product management ដើម្បីយកទៅតេស្ដលើ Postman
+Route::apiResource('products', ProductController::class)->names('api.products');
+
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\InventoryTransactionController;
+
+// 7. Purchase Management API (Phase 3: Feature #7)
+Route::apiResource('purchase-orders', PurchaseOrderController::class)->names('api.purchase-orders');
+Route::patch('purchase-orders/{purchase_order}/status', [PurchaseOrderController::class, 'updateStatus'])->name('api.purchase-orders.update-status');
+
+// 8. Inventory Management & Stock Adjustment API (Phase 3: Feature #8)
+Route::get('inventory-transactions', [InventoryTransactionController::class, 'index'])->name('api.inventory-transactions.index');
+Route::post('inventory/adjust', [InventoryTransactionController::class, 'adjustStock'])->name('api.inventory.adjust');
+
